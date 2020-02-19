@@ -1,0 +1,26 @@
+body
+{
+    margin: 0;
+    
+    background-color: red;
+}
+
+.barra
+{
+    width: 100%;
+    height: 50px;
+    background-color: crimson;
+    
+}
+
+#barra2
+{
+    width: 100%;
+    height: 5px;
+    background-color: #41D6C0;
+}
+
+#hola:hover
+{
+    background-color: red;    
+}
