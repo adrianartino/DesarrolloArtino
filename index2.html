@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="x-ua-compatible" content="ie-edge">
+    <title>DESARROLLO ARTIÑO</title>
+    <link rel="stylesheet" href="cssnobootstrap/estilosindex.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+</head>
+<body>
+    
+    <div class="barra"></div>
+    
+    <div id="barra2"></div>
+    
+    <div class="container">
+        <img id="logo" class="img-fluid"  src="img/logo.png" alt="logo" width="307" height="240">
+    </div>
+    
+    
+    <br>
+    
+    <div class="container" >
+        <h1 id="titulo1" class="display-4 text-right" >Desarrollo De Aplicaciones Web</h1>
+        <h5 id="titulo2" class="text-right">Ing. en Informática <small>6to Semestre</small></h5>
+        <h5 id="titulo2" class="text-right"><small>Ing. Salas Marin</small></h5>
+    </div>
+    
+    <div class="itsl">
+        <h3 id="titulo3" >Instituto Tecnológico Superior de Lerdo</h3>
+        <h5 >Marcos Adrian Guerrero Artiño</h5>
+        <h5  ><small>17231726</small></h5>
+    </div>
+        
+    
+    <nav id="barracorte1" style="background-color: blue" class="navbar navbar-expand-sm bg-dark navbar-dark" >
+          <!-- Brand -->
+          <a class="navbar-brand" >Corte 1</a>
+
+          
+          <ul class="navbar-nav">
+           
+            <!-- Link a proyecto 0 -->
+            <li class="nav-item">
+              <a class="nav-link" href="#">Proyecto 0</a>
+            </li>
+            
+
+            <!-- Dropdown de Lecciones -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown">
+                Lecciones
+              </a>
+              <div class="dropdown-menu">
+                <a id="leccion1" class="dropdown-item" href="Lecciones/LeccionesCorte1/Leccion3/menulec3.html">Lección 3</a>
+                <a id="leccion2" class="dropdown-item" href="Lecciones/LeccionesCorte1/Leccion4/menulec4.html">Lección 4</a>
+              </div>
+            </li>
+            
+          </ul>
+    </nav>
+    
+    
+    
+    
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-bottom  " style="background-color: #20B46C ">
+      <a class="navbar-brand" href="https://www.lerdo.tecnm.mx/">ITSL</a>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Redireccionar</a>
+        </li>
+      </ul>
+    </nav>
+    
+    
+    <div class="container">
+    <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: crimson;">
+          <h4 class="modal-title text-center" style="color: whitesmoke">Git Artiño - Aviso!</h4>
+        </div>
+        <div class="modal-body">
+          <p>Está agregada la leccion 3.</p>
+          <p>Está agregada la leccion 4.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+    
+    
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    
+    <script type="text/javascript">
+      $(function(){
+      $("#myModal").modal();
+      });
+    </script>
+    
+</body>
+</html>
