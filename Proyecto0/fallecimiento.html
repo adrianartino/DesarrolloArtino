@@ -9,20 +9,22 @@
     <meta name="author" content="">
 
     <title>Gustavo Cerati</title>
+    
+    <!-- Links estilos, animate.css, bootstrap.css, main css (scss) y font-awesome -->
     <link rel="stylesheet" type="text/css" href="../cssnobootstrap/animate.css">
     <link rel="stylesheet" type="text/css" href="../cssnobootstrap/EstilosProyecto0/estilosPro0.css">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../cssnobootstrap/main.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 
 <body>
-
+    
+    <!--Inicio Wrapper-->
     <div class="d-flex" id="wrapper">
 
-
+        <!-- sidebar -->
         <div class="bg-light border-right" id="sidebar-wrapper">
 
             <div class="sidebar-heading text-center font-weight-bold" style="background-color: #1A5A50!important; color: #f8b400;"> C E R A T I </div>
@@ -45,10 +47,11 @@
         </div>
         <!-- /#sidebar-wrapper -->
 
+       
         <!-- Page Content -->
         <div id="page-content-wrapper">
 
-            <!-- Sidebar -->
+            <!-- NAVBAR ARRIBA -->
             <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom" style="background-color: #f8b400!important">
                 <button class="btn btn-primary" id="menu-toggle" style="background-color: #004445; border: none;">Menú</button>
 
@@ -76,44 +79,56 @@
                     </ul>
                 </div>
             </nav>
+            <!-- FIN DE NAVBAR ARRIBA -->
 
+            <!-- CONTENIDO DE PAGINA -->
             <div class="container mt-5" style="position: relative;  width: 90%; ">
                 <div class="container">
+                   
                     <h1 class="animated bounceInUp">¿Cuáles fueron las causas de muerte de Gustavo Cerati?</h1>
                     <h6 class="animated bounceInUp" style="color: crimson;">.Febrero 2020 . Adrian Artiño</h6>
+                    
+                    <!-- IMAGEN -->
                     <center>
                         <img src="../img/boca.jpg" class="animated bounceInUp" alt="Cinque Terre" width="100%">
                     </center>
 
                     <br>
-
+                    
+                    <!-- subtitulo -->
                     <h2 class="wow bounceInUp text-justify">Gustavo Cerati sigue siendo parte de la cultura popular y un icono en la música latinoamericana, pero ¿qué fue lo que lo mató?</h2>
 
                     <br>
-
+                    
+                    <!-- PARRAFO -->
                     <p class="wow bounceInUp text-justify">
                         Se apagó. La voz dejó de escucharse. La mano de la que salían poemas abstractos que se convertían a la postre en canciones, dejó de escribir. No hubo más Gustavo Cerati. No hubo más música. El 4 de septiembre del 2014, uno de los genios más grandes que ha tenido la música latinoamericana y pioneros del movimiento conocido como Rock en tu idioma, falleció después de permanecer <span style="color: crimson">cuatro años en coma.</span>
                     </p>
 
-
+                    <!-- IMAGEN -->
                     <center>
                         <img src="../img/gus2.jpg" class="wow bounceInUp" alt="Cinque Terre" width="80%">
                     </center>
 
                     <br>
+                    
+                    <!-- SUBTITULO Y PARRAFO -->
                     <h2 class="wow bounceInUp text-justify">¿Cuáles son los rumores de su muerte?</h2>
                     <p class="wow bounceInUp text-justify">
                         La combinación de alcohol, mezclado con pastillas para la vigorosidad sexual, algo que Gustavo Cerati tenía médicamente prohibido porque era hipertenso, de acuerdo a información que se manejó en CNN.
                     </p>
 
+                    <!-- PARRAFO -->
                     <p class="wow bounceInUp text-justify">
                         Las investigaciones que se realizaron sin autorización de la familia del cantante, apuntaban a que este tipo de medicamento lo comenzó a utilizar desde que comenzó a salir con su última novia, la modelo Chloe Bello, quien era 28 años menor que Gustavo Cerati.
                     </p>
-
+                    
+                    <!-- PARRAFO -->
                     <p class="wow bounceInUp text-justify">
                         Chloe incluso se apareció un par de veces por el hospital después de haberse declarado el coma del músico argentino, sin embargo, declaró que dejaría de asistir porque también tenía cosas que hacer. En 2013, un año antes de la muerte de Gustavo Cerati, la modelo se desligó completamente del también compositor.
                     </p>
 
+                    <!-- IMAGEN -->
                     <center>
                         <img src="../img/gus3.jpg" class="wow bounceInUp" alt="Cinque Terre" width="80%">
                         <br>
@@ -124,7 +139,8 @@
                     <br>
 
                 </div>
-
+                
+                <!-- BOTON PARA IR ARRIBA -->
                 <a class="ir-arriba" javascript:void(0) title="Volver arriba">
                     <span class="fa-stack">
                         <i class="fa fa-circle fa-stack-2x"></i>
@@ -132,6 +148,7 @@
                     </span>
                 </a>
             </div>
+            <!-- FIN DE CONTENIDO DE PAGINA -->
 
         </div>
         <!-- /#page-content-wrapper -->
@@ -147,18 +164,26 @@
 
 
 
-    <!-- Bootstrap core JavaScript -->
+    <!-- Documentos JS -->
     <script src="../jquery/jquery.min.js"></script>
     <script src="../js/bootstrap.bundle.min.js"></script>
     <script src="../js/wow.min.js"></script>
 
-    <!-- Menu Toggle Script -->
+    <!-- Funciones JS -->
     <script>
+        
+        //Funcion Wrapper
         $("#menu-toggle").click(function(e) {
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
         });
-
+        
+        //Funcion toggle
+        $(document).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+        
+        //Función arriba
         $(document).ready(function() { //Hacia arriba
             irArriba();
         });
@@ -184,16 +209,14 @@
         }
     </script>
 
-    <script>
-        $(document).ready(function() {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
 
     <script>
+        //Animacion wow
         new WOW().init();
     </script>
-
+    
+    
+    <!--Estilos-->
     <style>
         #menu-toggle:hover {
             color: black;
