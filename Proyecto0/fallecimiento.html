@@ -47,7 +47,6 @@
     <!-- Page Content -->
     <div id="page-content-wrapper">
 
-        <img src = "../img/cerati4.png" style="position: absolute; width: 100%; height: 100%;" class = "img-responsive" alt = "Online Training">
     <!-- Sidebar -->
       <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom" 
        style="background-color: #f8b400!important">
@@ -83,11 +82,59 @@
       </nav>
 
       <div class="container mt-5" style="position: relative;  width: 90%; " >
-        <h1 class="display-1" style="color: #effffb; ">GUSTAVO
-          <span style="color: #f8b400; ">CERATI</span>
-        </h1>
-        <h5 style="color: white;">Una página de historia, música y tristezas.</h5>
+        <div class="container">
+          <h1 class="animated bounceInUp">¿Cuáles fueron las causas de muerte de Gustavo Cerati?</h1>
+          <h6 class="animated bounceInUp" style="color: crimson;">.Febrero 2020 . Adrian Artiño</h6>
+           <center>
+               <img src="../img/boca.jpg" class="animated bounceInUp" alt="Cinque Terre" width="100%" > 
+           </center>
+           
+           <br>
+           
+           <h2 class="wow bounceInUp text-justify">Gustavo Cerati sigue siendo parte de la cultura popular y un icono en la música latinoamericana, pero ¿qué fue lo que lo mató?</h2>
+           
+           <br>    
+           
+           <p class="wow bounceInUp text-justify">
+               Se apagó. La voz dejó de escucharse. La mano de la que salían poemas abstractos que se convertían a la postre en canciones, dejó de escribir. No hubo más Gustavo Cerati. No hubo más música. El 4 de septiembre del 2014, uno de los genios más grandes que ha tenido la música latinoamericana y pioneros del movimiento conocido como Rock en tu idioma, falleció después de permanecer <span style="color: crimson">cuatro años en coma.</span>
+           </p>   
+           
+           
+           <center>
+               <img src="../img/gus2.jpg" class="wow bounceInUp" alt="Cinque Terre" width="80%" > 
+           </center>
+            
+            <br>
+            <h2 class="wow bounceInUp text-justify">¿Cuáles son los rumores de su muerte?</h2>
+            <p class="wow bounceInUp text-justify">
+                La combinación de alcohol, mezclado con pastillas para la vigorosidad sexual, algo que Gustavo Cerati tenía médicamente prohibido porque era hipertenso, de acuerdo a información que se manejó en CNN.
+            </p>
+            
+            <p class="wow bounceInUp text-justify">
+                Las investigaciones que se realizaron sin autorización de la familia del cantante, apuntaban a que este tipo de medicamento lo comenzó a utilizar desde que comenzó a salir con su última novia, la modelo Chloe Bello, quien era 28 años menor que Gustavo Cerati.
+            </p>
+            
+            <p class="wow bounceInUp text-justify">
+                Chloe incluso se apareció un par de veces por el hospital después de haberse declarado el coma del músico argentino, sin embargo, declaró que dejaría de asistir porque también tenía cosas que hacer. En 2013, un año antes de la muerte de Gustavo Cerati, la modelo se desligó completamente del también compositor.
+            </p>
+               
+            <center>
+               <img src="../img/gus3.jpg" class="wow bounceInUp" alt="Cinque Terre" width="80%" > 
+               <br>
+               <br>
+               <h6 style="color: #f8b400">.CERATI. GRACIAS TOTALES.</h6>
+           </center>
+            
+            <br>
+                
+        </div>
         
+        <a class="ir-arriba"  javascript:void(0) title="Volver arriba">
+                    <span class="fa-stack">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-arrow-up fa-stack-1x fa-inverse"></i>
+                    </span>
+            </a>
       </div>
       
     </div>
@@ -107,6 +154,7 @@
   <!-- Bootstrap core JavaScript -->
   <script src="../jquery/jquery.min.js"></script>
   <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/wow.min.js"></script>
 
   <!-- Menu Toggle Script -->
   <script>
@@ -114,6 +162,18 @@
       e.preventDefault();
       $("#wrapper").toggleClass("toggled");
     });
+      
+     $(document).ready(function(){ //Hacia arriba
+          irArriba();
+        });
+
+        function irArriba(){
+          $('.ir-arriba').click(function(){ $('body,html').animate({ scrollTop:'0px' },1000); });
+          $(window).scroll(function(){
+            if($(this).scrollTop() > 0){ $('.ir-arriba').slideDown(600); }else{ $('.ir-arriba').slideUp(600); }
+          });
+          $('.ir-abajo').click(function(){ $('body,html').animate({ scrollTop:'1000px' },1000); });
+        }
   </script>
 
     <script>
@@ -122,7 +182,10 @@
         });
     </script>
   
-  
+      <script>
+        new WOW().init();
+    </script>
+    
     <style>
     
     #menu-toggle:hover 
@@ -135,6 +198,18 @@
     {
             color: #0c9463!important;
     }
+        
+    .ir-arriba{
+              display:none;
+              background-repeat:no-repeat;
+              font-size:20px;
+              color:black;
+              cursor:pointer;
+              position:fixed;
+              bottom:10px;
+              right:10px;
+              z-index:2;
+            }
     </style>
 
 </body>
