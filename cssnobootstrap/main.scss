@@ -1,0 +1,25 @@
+$colorhover: #ededed; //Creacion de variable de color para el sidevar
+
+//Herencia de body
+body
+{
+    #b2 //id de biografía
+    {
+        color: $colorhover; //se le coloca la variable
+    }
+
+    #b3 
+    {
+        color: $colorhover;
+    }
+
+    #b4
+    {
+        color: $colorhover;
+    }
+
+    #b5
+    {
+        color: $colorhover;
+    }
+}
