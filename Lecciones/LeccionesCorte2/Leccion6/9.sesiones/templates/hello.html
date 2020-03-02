@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    
+    {% extends "layout.html" %} 
+    
+    {% block heading %} 
+    <h1>HOLA!</h1>
+    {% endblock %} 
+    
+    {% block body %} 
+    Hello, {{ nombreenviado }}!
+    <h1>Hello, {{ nombreenviado }}!</h1> <!--DUDAAAA-->
+    {% endblock %}
+    
+</body>
+</html>

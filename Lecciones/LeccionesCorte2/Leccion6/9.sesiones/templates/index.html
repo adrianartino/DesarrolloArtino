@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    
+    {% extends "layout.html" %} <!--Hereda layaut.hml-->
+    
+    {% block heading %} 
+        <h1>PRIMERA PAGINA!</h1>
+    {% endblock %} 
+    
+    {% block body %} 
+        <form action="{{ url_for('hello') }}" method="post"> 
+            <input type="text" name="nombreenviado" placeholder="Enter Your Name"> 
+            <button>Mandar nombre</button> 
+        </form> 
+    {% endblock %}
+    
+</body>
+</html>

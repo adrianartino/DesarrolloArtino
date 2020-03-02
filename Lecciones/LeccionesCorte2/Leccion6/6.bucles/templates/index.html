@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+   
+    <h1>Nombres</h1>
+    
+    <ul>
+        {% for name in names %}  <!--loop de python, que muestra cada nombre de la variable flask name -->
+            <li>{{ name }}</li> <!--colocar el primer valor del loop-->
+        {% endfor %}
+    </ul>
+</body>
+</html>

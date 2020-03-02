@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Es año nuevo ?</title>
+    
+   <!-- Se le da estilo al head-->
+    <style> 
+        body { text-align: center; } 
+    </style>
+    
+</head>
+<body>
+    {% if new_year %} <!-- Variable pasada por render template-->
+        <h1>SIII! FELIZ AÑO NUEVOOO!</h1>
+    {% else %} <!--si no es año nuevooo..-->
+        <h1>NO</h1> 
+    {% endif %} <!-- fin del if-->
+</body>
+</html>
