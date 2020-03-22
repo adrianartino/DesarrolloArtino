@@ -8,9 +8,12 @@ Css y JS utilizado:
   -animate.css
   -wow.js
   -Función hacia arriba cuando se baja el scroll, se da clic a un botón.
-  
+
  Proyectos:
   -Leccion 3
   -Leccion 4
+  -Leccion 5
+  -Leccion 6
+  -Leccion 7
   -Problemas Python
   -Proyecto 0
