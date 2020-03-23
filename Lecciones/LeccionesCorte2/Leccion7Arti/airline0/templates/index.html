@@ -10,22 +10,20 @@
   {% block title %}
   Flights
   {% endblock %}
+
   {% block body %}
   <h1>Book a Flight</h1>
   <form action="{{ url_for('book') }}" method="post">
     <div class="form-group">
       <select class="form-control" name="flight_id">
         {% for flight in flights %}
-        <option value="{{ flight.id }}">{{ flight.origen }} to
-
-          {{ flight.destino }}</option>
+        <option value="{{ flight.id }}">{{ flight.origen }} to {{ flight.destino }}</option>
         {% endfor %}
       </select>
     </div>
     <div class="form-group">
 
-      <input class="form-
-    control" name="name" placeholder="Passenger Name">
+      <input class="form-control" name="name" placeholder="Passenger Name">
 
     </div>
     <div class="form-group">
