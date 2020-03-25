@@ -6,9 +6,11 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="x-ua-compatible" content="ie-edge">
   <title>DESARROLLO ARTIÑO</title>
-  <link rel="stylesheet" type="text/css" href="..\../css/bootstrap.css">
 
-  <link rel="stylesheet" type="text/css" href="..\../css/proyecto1index.css">
+  <link rel= "stylesheet" type= "text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+
+  <link rel= "stylesheet" type= "text/css" href="{{ url_for('static', filename='css/proyecto1index.css') }}">
+
   <script src="https://kit.fontawesome.com/a81368914c.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -22,12 +24,12 @@
 
   <div class="container">
 		<div class="img">
-			<img src="..\../img/svgimages/loginimage.svg">
+			<img src="{{ url_for('static', filename='img/loginimage.svg') }}">
 		</div>
 		<div class="login-content">
-			<form action="index.html">
+			<form action="{{ url_for('validar') }}" method="post">
 
-				<img src="..\../img/logopaginatrans.png" style="width: 80%; height: 70%;">
+				<img src="{{ url_for('static', filename='img/logopaginatrans.png') }}" style="width: 80%; height: 70%;">
         <br><br>
 				<h4 class="title" style="color: #f6eedf!important;">BIENVENIDO</h4>
            		<div class="input-div one">
@@ -36,7 +38,7 @@
            		   </div>
            		   <div class="div">
            		   		<h5>Usuario</h5>
-           		   		<input type="text" class="input">
+           		   		<input type="text" class="input" name="nombreusuario" >
            		   </div>
            		</div>
            		<div class="input-div pass">
@@ -45,12 +47,12 @@
            		   </div>
            		   <div class="div">
            		    	<h5>Contraseña</h5>
-           		    	<input type="password" class="input">
+           		    	<input type="password" class="input" name="contrausuario">
             	   </div>
             	</div>
             	<a href="#">Olvidaste la contraseña?</a>
             	<input type="submit" class="btn" value="Login">
-              <a id="a2" href="#">No tienes cuenta? Registrate!</a>
+              <a id="a2" href="{{ url_for('registro') }}">No tienes cuenta? Registrate!</a>
 
             </form>
         </div>
@@ -74,10 +76,10 @@
 
 
   <!--Documentos JS-->
-  <script src="..\../js/jquery-3.3.1.slim.min.js"></script>
-  <script src="..\../js/popper.min.js"></script>
-  <script src="..\../js/bootstrap.min.js"></script>
-  <script src="..\../js/mainp1.js"></script>
+  <script src="{{url_for('static', filename='js/jquery-3.3.1.slim.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/mainp1.js')}}"></script>
 
 
 
