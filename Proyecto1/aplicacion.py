@@ -1,6 +1,15 @@
 from flask import Flask, render_template, request
 
+from sqlalchemy import create_engine   #crear instancia para base de datos
+from sqlalchemy.orm import scoped_session, sessionmaker
+
+import os
+
+
 app = Flask(__name__)
+
+engine = create_engine("postgres://saciatig:qdSgbJnUJhokzzt7IQhMZSEBD41EfRGS@otto.db.elephantsql.com:5432/saciatig") #se conecta a la base de datos
+basededatos = scoped_session(sessionmaker(bind=engine))
 
 #index normal
 @app.route("/")
@@ -53,7 +62,7 @@ def validarregistro():
         error = True
         textoerror += " Ingrese bien el correo y verifique las contraseñas! "
         registroexitoso = False
-        
+
     #si las contraseñas no coinciden
     elif contraregistrar != contra2registrar:
         error = True
@@ -65,11 +74,14 @@ def validarregistro():
         textoerror += " Ingrese bien el correo!"
         registroexitoso = False
 
-
-
     else:
         registroexitoso = True
         error = False
+        #meter datos a base de datos ya que no hay errores
+
+        #se necesita comprobar si existe o no ese nombre de usuario..
+        basededatos.execute("INSERT INTO usuarios (usuario, nombreusuario, apellidousuario, contraseñausuario, correousuario) VALUES (:usuario, :nombreusuario, :apellidousuario, :contraseñausuario, :correousuario)",{"usuario": usuarioregistrar, "nombreusuario": nombreregistrar, "apellidousuario": apellidoregistrar, "contraseñausuario": contraregistrar, "correousuario": correoregistrar})
+    basededatos.commit()
 
 
 
