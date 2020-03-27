@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, session
 
 from sqlalchemy import create_engine   #crear instancia para base de datos
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -21,7 +21,23 @@ def index():
 def validar():
     nombrerecibido = request.form.get("nombreusuario")
     contrarecibida = request.form.get("contrausuario")
-    return f"Usuario : {nombrerecibido} ! Contraseña : {contrarecibida} !"
+
+    usuarioencontrado = basededatos.execute("SELECT usuario FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
+    contraseñaencontrada = basededatos.execute("SELECT 	contraseñausuario FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
+
+    if usuarioencontrado is None:
+        return f"No se encontro el usuario"+nombrerecibido
+    else:
+        for passwor_data in contraseñaencontrada:
+            if contrarecibida == passwor_data:  #si son iguales...
+                return f"Bienvenido!"
+                #return redirect(url_for('hello')) #to be edited from here do redict to either svm or home
+            else:
+                return f"La contraseña es incorrecta"
+				#return render_template('login.html')
+
+    basededatos.commit()
+    #return f"Usuarios : {numerodeusuarios} ! Contraseña : {contrarecibida} !"
 
 #registro
 @app.route("/registro")
