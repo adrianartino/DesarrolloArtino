@@ -7,6 +7,9 @@ import os
 
 
 app = Flask(__name__)
+app.secret_key = "1234"
+
+
 
 engine = create_engine("postgres://saciatig:qdSgbJnUJhokzzt7IQhMZSEBD41EfRGS@otto.db.elephantsql.com:5432/saciatig") #se conecta a la base de datos
 basededatos = scoped_session(sessionmaker(bind=engine))
@@ -14,30 +17,68 @@ basededatos = scoped_session(sessionmaker(bind=engine))
 #index normal
 @app.route("/")
 def index():
-    return render_template("index.html")
+    if "user" in session:
+        return redirect(url_for("home"))
+    else:
+        return render_template("index.html")
 
 #cuando se le da clic al boton para validar usuario y contraseña
-@app.route("/validar", methods=["POST"])
+@app.route("/validar", methods=["POST", "GET"])
 def validar():
-    nombrerecibido = request.form.get("nombreusuario")
-    contrarecibida = request.form.get("contrausuario")
+    #Checa a ver si se mando algo...
+    if request.method == "POST":
+        nombrerecibido = request.form.get("nombreusuario")
+        contrarecibida = request.form.get("contrausuario")
 
-    usuarioencontrado = basededatos.execute("SELECT usuario FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
-    contraseñaencontrada = basededatos.execute("SELECT 	contraseñausuario FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
+        usuarioencontrado = basededatos.execute("SELECT usuario FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
+        contraseñaencontrada = basededatos.execute("SELECT 	contraseñausuario FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
 
-    if usuarioencontrado is None:
-        return f"No se encontro el usuario"+nombrerecibido
+        nombrereal = basededatos.execute("SELECT nombreusuario FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
+        apellidoreal = basededatos.execute("SELECT apellidousuario FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
+        idusuario = basededatos.execute("SELECT id FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
+
+        if usuarioencontrado is None:
+            return f"No se encontro el usuario "+nombrerecibido
+            #falta splash de error
+        else:
+
+            for passwor_data in contraseñaencontrada:
+                if contrarecibida == passwor_data:  #si son iguales...
+
+                    session["user"] = nombrerecibido#se guarda la variable session.
+                    return redirect(url_for('home')) #redirecciona a home si funciona..
+                else:
+                    return f"La contraseña es incorrecta"
+    				#return render_template('login.html')
+                    #falta splash de error
+
+        basededatos.commit()
+        #return f"Usuarios : {numerodeusuarios} ! Contraseña : {contrarecibida} !"
+
+    #si no se mando nada...
     else:
-        for passwor_data in contraseñaencontrada:
-            if contrarecibida == passwor_data:  #si son iguales...
-                return f"Bienvenido!"
-                #return redirect(url_for('hello')) #to be edited from here do redict to either svm or home
-            else:
-                return f"La contraseña es incorrecta"
-				#return render_template('login.html')
+        #si hay una sesion iniciada... que lo mande a home.
+        if "user" in session:
+            return redirect(url_for("home"))
 
-    basededatos.commit()
-    #return f"Usuarios : {numerodeusuarios} ! Contraseña : {contrarecibida} !"
+        return render_template("index.html")
+
+#Menu ya logueado
+@app.route("/home")
+def home():
+    if "user" in session:
+        usuariomostrar = session["user"]
+        return f"Nombre usuario sesion: " + usuariomostrar
+
+    else:
+        return redirect(url_for("validar"))
+
+#Menu ya logueado
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return render_template("index.html")
+
 
 #registro
 @app.route("/registro")

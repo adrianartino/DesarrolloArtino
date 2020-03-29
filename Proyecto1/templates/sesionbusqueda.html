@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="x-ua-compatible" content="ie-edge">
+  <title>DESARROLLO ARTIÑO</title>
+
+  <link rel= "stylesheet" type= "text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+
+  <link rel= "stylesheet" type= "text/css" href="{{ url_for('static', filename='css/proyecto1busqueda.css') }}">
+
+  <link rel= "stylesheet" type= "text/css" href="../static/css/bootstrap.css">
+  <link rel= "stylesheet" type= "text/css" href="../static/css/proyecto1busqueda.css">
+
+  <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
+  <link href="signin.css" rel="stylesheet">
+</head>
+
+<body>
+
+
+
+
+  <nav  class="navbar navbar-expand-md navbar-dark  navbar-custom" >
+      <img src="../static/img/logopaginatrans.png" style="width: 13%; ">
+
+      <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+          <div class="navbar-nav">
+
+              <a  class="nav-item nav-link active"></a>
+              <a  class="nav-item nav-link active"><i class="fa fa-address-book" style="font-size:18px"></i> {{nusuariomostrar}}</a>
+              <a href="#" class="nav-item nav-link"><i class="	fa fa-comments" style="font-size:18px"></i> Home</a>
+              <a href="#" class="nav-item nav-link"><i class="fa fa-home" style="font-size:18px"></i> Mis opiniones</a>
+          </div>
+          <form class="form-inline ml-auto">
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" data-display="static" aria-expanded="false">
+                Mi cuenta
+              </button>
+              <div class="dropdown-menu dropdown-menu-lg-right">
+                <button class="dropdown-item" type="button"><i class="fa fa-sign-out" style="font-size:22px"></i> Cerrar Sesion</button>
+                <button class="dropdown-item" type="button"><i class="fa fa-key" style="font-size:22px"></i> Cambiar Contraseña</button>
+              </div>
+            </div>
+
+          </form>
+      </div>
+  </nav>
+
+
+
+
+
+
+
+  <!--Documentos JS-->
+  <script src="{{url_for('static', filename='js/jquery-3.3.1.slim.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/mainp1.js')}}"></script>
+
+  <script src="../static/js/jquery-3.3.1.slim.min.js"></script>
+  <script src="../static/js/popper.min.js"></script>
+  <script src="../static/js/bootstrap.min.js"></script>
+  <script src="../static/js/mainp1.js"></script>
+
+
+
+  <!--Funciòn toogle-->
+  <script>
+    $(document).ready(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    //función wrapper
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+  </script>
+
+</body>
+
+</html>
