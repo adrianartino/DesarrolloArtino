@@ -8,28 +8,29 @@
   <title>DESARROLLO ARTIÑO</title>
 
   <link rel= "stylesheet" type= "text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-
   <link rel= "stylesheet" type= "text/css" href="{{ url_for('static', filename='css/proyecto1busqueda.css') }}">
 
-  <link rel= "stylesheet" type= "text/css" href="../static/css/bootstrap.css">
-  <link rel= "stylesheet" type= "text/css" href="../static/css/proyecto1busqueda.css">
+
 
   <script src="https://kit.fontawesome.com/a81368914c.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Heebo&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
 
   <link href="signin.css" rel="stylesheet">
 </head>
 
-<body>
+<body style="background-color: #ffd5ab!important;">
 
 
 
 
-  <nav  class="navbar navbar-expand-md navbar-dark  navbar-custom" >
-      <img src="../static/img/logopaginatrans.png" style="width: 13%; ">
+  <nav  class="navbar navbar-expand-md navbar-dark  navbar-custom" style="font-family: 'Heebo', sans-serif;">
+      <img src="{{ url_for('static', filename='img/logopaginatrans.png') }}" style="width: 13%; ">
 
       <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
           <span class="navbar-toggler-icon"></span>
@@ -39,19 +40,19 @@
           <div class="navbar-nav">
 
               <a  class="nav-item nav-link active"></a>
-              <a  class="nav-item nav-link active"><i class="fa fa-address-book" style="font-size:18px"></i> {{nusuariomostrar}}</a>
-              <a href="#" class="nav-item nav-link"><i class="	fa fa-comments" style="font-size:18px"></i> Home</a>
-              <a href="#" class="nav-item nav-link"><i class="fa fa-home" style="font-size:18px"></i> Mis opiniones</a>
+              <a  class="nav-item nav-link active"><i class="fa fa-address-book" style="font-size:18px"></i> {{usuariomostrar}}</a>
+              <a href="#" class="nav-item nav-link" ><i class="	fa fa-home" style="font-size:18px;"></i> Home</a>
+              <a href="{{url_for('logout')}}" class="nav-item nav-link"><i class="fa fa-comments" style="font-size:18px"></i> Mis opiniones</a>
           </div>
           <form class="form-inline ml-auto">
 
-            <div class="btn-group">
-              <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" data-display="static" aria-expanded="false">
+            <div class="btn-group" >
+              <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-expanded="false" style="background-color: #D97A69!important; border: none; color: white!important;">
                 Mi cuenta
               </button>
-              <div class="dropdown-menu dropdown-menu-lg-right">
-                <button class="dropdown-item" type="button"><i class="fa fa-sign-out" style="font-size:22px"></i> Cerrar Sesion</button>
-                <button class="dropdown-item" type="button"><i class="fa fa-key" style="font-size:22px"></i> Cambiar Contraseña</button>
+              <div class="dropdown-menu dropdown-menu-lg-right" >
+                <a class="dropdown-item" href="{{url_for('logout')}}"><i class="fa fa-sign-out" style="font-size:22px"></i> Cerrar sesion</a>
+                <a class="dropdown-item" href="#"><i class="fa fa-key" style="font-size:22px"></i> Cambiar contraseña</a>
               </div>
             </div>
 
@@ -59,22 +60,49 @@
       </div>
   </nav>
 
+  <div class="container mt-5" id="jaja" style="background: #eb9788!important;">
+    <center>
+      <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Busca un libro!</h1>
+
+      <img src="{{ url_for('static', filename='img/libros.png') }}" style="width: 10%; ">
+      <div class="container mt-1">
+
+        <p style="font-family: 'Oswald', sans-serif; font-size:150%!important;">Bookaholics es una página web que te permite buscar entre más del
+        5000 libros! Puedes buscar por:</p>
+        <br>
+        <p style="font-family: 'Oswald', sans-serif; font-size:125%!important;"><strong>ISBN:</strong> Es el código que identifica a un libro,
+        por ejemplo "0380795272".</p>
+
+        <p style="font-family: 'Oswald', sans-serif; font-size:125%!important;"><strong>Título del libro:</strong> Es el nombre del libro, por ejemplo "The Dark Is Rising".</p>
+
+        <p style="font-family: 'Oswald', sans-serif; font-size:125%!important;"><strong>Autor del libro:</strong> Es el nombre de la persona que escribió el libro,
+          por ejemplo "Terry Brooks".</p>
+
+        <p style="font-family: 'Oswald', sans-serif; font-size:125%!important;"><strong>Año de publicación:</strong> Es el año en que el libro fue publicado,
+          por ejemplo "1980".</p>
+
+      </div>
+
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Buscar" name="search">
+        <div class="input-group-btn" >
+          <button class="btn "  type="submit" style="background-color: #C7513C!important;"><i class="fa fa-search"></i></button>
+        </div>
+      </div>
+      <p style=" font-family: 'Lobster', cursive;">Be a Bookaholic</p>
+    </center>
+
+  </div>
 
 
 
 
-
-
-  <!--Documentos JS-->
   <script src="{{url_for('static', filename='js/jquery-3.3.1.slim.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
-  <script src="{{url_for('static', filename='js/mainp1.js')}}"></script>
 
-  <script src="../static/js/jquery-3.3.1.slim.min.js"></script>
-  <script src="../static/js/popper.min.js"></script>
-  <script src="../static/js/bootstrap.min.js"></script>
-  <script src="../static/js/mainp1.js"></script>
+
+
 
 
 

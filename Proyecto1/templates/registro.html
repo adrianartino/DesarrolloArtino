@@ -15,6 +15,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+  <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
 
   <link href="signin.css" rel="stylesheet">
 </head>
@@ -27,16 +28,29 @@
 		<div class="img">
 			<img src="{{ url_for('static', filename='img/loginimage.svg') }}">
 		</div>
-		<div class="login-content">
+		<div class="login-content" >
 			<form action="{{ url_for('validarregistro') }}" method="POST">
 
 				<img src="{{ url_for('static', filename='img/logopaginatrans.png') }}" style="width: 70%; height: 60%;">
         <br><br>
-				<h4 class="title" style="color: #f6eedf!important;">REGISTRO</h4>
+				<h4 class="title" style="color: #f6eedf!important; font-family: 'Lobster', cursive;">Registrate!</h4>
 
-           		<div class="input-div one">
+              {% if error %}
+           		<div class="input-div one" style="padding: 1px!important">
            		   <div class="i">
-           		   		<i class="fas fa-user"></i>
+           		   		<i class="fas fa-user" style="color: #18b0b0;" ></i>
+           		   </div>
+
+           		   <div class="div">
+           		   		<h5 style="top: -5px; font-size: 15px;">Usuario</h5>
+           		   		<input type="text" class="input" data-toggle="tooltip" data-placement="right"
+                    title="Tu nombre de bookaholic!" name="usuarioregistro" value="{{usuarioregistrar}}">
+           		   </div>
+           		</div>
+              {% else %}
+              <div class="input-div one" style="padding: 1px!important">
+           		   <div class="i">
+           		   		<i class="fas fa-user" ></i>
            		   </div>
 
            		   <div class="div">
@@ -45,9 +59,12 @@
                     title="Tu nombre de bookaholic!" name="usuarioregistro">
            		   </div>
            		</div>
+              {% endif %}
 
 
-           		<div class="input-div pass">
+
+
+           		<div class="input-div pass" style="padding: 1px!important">
            		   <div class="i">
            		    	<i class="fas fa-lock"></i>
            		   </div>
@@ -59,7 +76,8 @@
             	</div>
 
 
-              <div class="input-div pass">
+
+              <div class="input-div pass" style="padding: 1px!important">
            		   <div class="i">
            		    	<i class="fas fa-lock"></i>
            		   </div>
@@ -72,18 +90,47 @@
             	</div>
               <br>
 
-              <div class="input-div one">
+
+
+
+              {% if error %}
+              <div class="input-div one" style="padding: 1px!important">
            		   <div class="i">
-           		   		<i class="fas fa-user"></i>
+           		   		<i class="fas fa-user" style="color: #18b0b0;"></i>
            		   </div>
 
            		   <div class="div">
-           		   		<h5>Nombre</h5>
-           		   		<input type="text" class="input" name="nombreusuarioregistro">
+           		   		<h5 style="top: -5px; font-size: 15px;">Nombre</h5>
+           		   		<input type="text" class="input" name="nombreusuarioregistro" value="{{nombreregistrar}}">
            		   </div>
            		</div>
+              {% else  %}
+              <div class="input-div one" style="padding: 1px!important">
+           		   <div class="i">
+           		   		<i class="fas fa-user" ></i>
+           		   </div>
 
-              <div class="input-div one">
+           		   <div class="div">
+           		   		<h5 >Nombre</h5>
+           		   		<input type="text" class="input" name="nombreusuarioregistro" >
+           		   </div>
+           		</div>
+              {% endif  %}
+
+
+              {% if error %}
+              <div class="input-div one" style="padding: 1px!important">
+           		   <div class="i">
+           		   		<i class="fas fa-user" style="color: #18b0b0;"></i>
+           		   </div>
+
+           		   <div class="div">
+           		   		<h5 style="top: -5px; font-size: 15px;">Apellido</h5>
+           		   		<input type="text" class="input" name="apellidoregistro" value="{{apellidoregistrar}}">
+           		   </div>
+           		</div>
+              {% else  %}
+              <div class="input-div one" style="padding: 1px!important">
            		   <div class="i">
            		   		<i class="fas fa-user"></i>
            		   </div>
@@ -93,8 +140,24 @@
            		   		<input type="text" class="input" name="apellidoregistro">
            		   </div>
            		</div>
+              {% endif %}
 
-              <div class="input-div one">
+
+
+              {% if error %}
+              <div class="input-div one" style="padding: 1px!important">
+           		   <div class="i">
+           		   		<i class="fas fa-envelope" style="color: #18b0b0;"></i>
+           		   </div>
+
+           		   <div class="div">
+           		   		<h5 style="top: -5px; font-size: 15px;">Correo Electrónico</h5>
+           		   		<input type="text" class="input" data-toggle="tooltip" data-placement="right"
+                    title="Ejemplo: bookaholics@gmail.com" name="correoregistro" value="{{correoregistrar}}">
+           		   </div>
+           		</div>
+              {% else %}
+              <div class="input-div one" style="padding: 1px!important">
            		   <div class="i">
            		   		<i class="fas fa-envelope"></i>
            		   </div>
@@ -105,8 +168,11 @@
                     title="Ejemplo: bookaholics@gmail.com" name="correoregistro">
            		   </div>
            		</div>
+              {% endif %}
 
-            	<input type="submit" class="btn" value="Registrarme">
+            	<input type="submit" class="btn" value="Registrarme" style="height: 30%!important;">
+              <a id="a2"  href="{{ url_for('index') }}">Regresar al inicio!</a>
+
 
             </form>
         </div>
@@ -145,7 +211,7 @@
           Swal.fire({
               icon: 'error',
               title: 'Oops...',
-              text: ' {{textoerror}}:(',
+              text: ' {{textoerror}}',
               footer: '<span style="color: crimson!important"> Corrige los errores para completar el registro! </span>',
               width: '40%'
           });

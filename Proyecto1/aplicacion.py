@@ -67,9 +67,21 @@ def validar():
 @app.route("/home")
 def home():
     if "user" in session:
-        usuariomostrar = session["user"]
-        return f"Nombre usuario sesion: " + usuariomostrar
+        usuario = session["user"]
+        nombreusuario = basededatos.execute("SELECT nombreusuario FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
+        apellidousuario = basededatos.execute("SELECT apellidousuario FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
 
+        for row in nombreusuario:
+            nusuario = nombreusuario[0]
+
+        for row in apellidousuario:
+            ausuario = apellidousuario[0]
+
+        usuariomostrar = nusuario + " " + ausuario
+        #nusuario = nombreusuario
+        #ausuario = apellidousuario
+
+        return render_template("sesionbusqueda.html",usuariomostrar=usuariomostrar)
     else:
         return redirect(url_for("validar"))
 
@@ -77,7 +89,8 @@ def home():
 @app.route("/logout")
 def logout():
     session.pop("user", None)
-    return render_template("index.html")
+    #return render_template("index.html")
+    return redirect(url_for("index"))
 
 
 #registro
@@ -100,8 +113,17 @@ def validarregistro():
     textoerror = ""
     registroexitoso = False
 
+    usuarioencontrado = basededatos.execute("SELECT usuario FROM usuarios WHERE usuario=:username",{"username":usuarioregistrar}).fetchone()
+
+    #si se encuentra un usuario con ese nombre...
+    if usuarioencontrado is not None:
+        error = True
+        error1 = True
+        textoerror=" Ya hay alguien registrado con ese nombre de usuario!"
+        registroexitoso = False
+
     #si todos los campos estan vacios..
-    if usuarioregistrar == "" and contraregistrar == "" and contra2registrar == "" and nombreregistrar == "" and apellidoregistrar == "" and correoregistrar == "":
+    elif usuarioregistrar == "" and contraregistrar == "" and contra2registrar == "" and nombreregistrar == "" and apellidoregistrar == "" and correoregistrar == "":
         error = True
         textoerror=" Te faltan rellenar todos los campos!"
         registroexitoso = False
@@ -144,4 +166,4 @@ def validarregistro():
 
 
 
-    return render_template("registro.html", error=error , textoerror=textoerror, registroexitoso=registroexitoso)
+    return render_template("registro.html", error=error , textoerror=textoerror, usuarioregistrar=usuarioregistrar, nombreregistrar=nombreregistrar, apellidoregistrar=apellidoregistrar, correoregistrar=correoregistrar)

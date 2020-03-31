@@ -33,6 +33,7 @@ body{
 }
 
 .login-content{
+	top: -80px;
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
@@ -133,7 +134,7 @@ form{
 	left: 0;
 	top: 0;
 	width: 100%;
-	height: 100%;
+	height: 80%;
 	border: none;
 	outline: none;
 	background: none;

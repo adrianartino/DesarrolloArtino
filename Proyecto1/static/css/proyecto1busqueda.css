@@ -5,9 +5,16 @@
  */
 body {
   overflow-x: hidden;
-  font-family: 'Open Sans', sans-serif;
-  background-color: #CF6C52;
+  font-family: 'Lobster', cursive;
+  background-color: #ffd5ab!important;
 }
+
+.dropdown-toggle
+{
+  background-color: red;
+}
+
+
 
 #sidebar-wrapper {
   min-height: 100vh;
