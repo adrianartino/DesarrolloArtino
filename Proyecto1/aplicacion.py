@@ -27,28 +27,36 @@ def index():
 def validar():
     #Checa a ver si se mando algo...
     if request.method == "POST":
+
+        textoerror = ""
+
         nombrerecibido = request.form.get("nombreusuario")
         contrarecibida = request.form.get("contrausuario")
 
         usuarioencontrado = basededatos.execute("SELECT usuario FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
         contraseñaencontrada = basededatos.execute("SELECT 	contraseñausuario FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
 
-        nombrereal = basededatos.execute("SELECT nombreusuario FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
-        apellidoreal = basededatos.execute("SELECT apellidousuario FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
-        idusuario = basededatos.execute("SELECT id FROM usuarios WHERE usuario=:username",{"username":nombrerecibido}).fetchone()
+        if nombrerecibido == "" or contrarecibida == "":
+            error = True
+            textoerror += "Te ha faltado ingresar datos!"
+            return render_template("index.html", error=error, textoerror=textoerror)
 
-        if usuarioencontrado is None:
-            return f"No se encontro el usuario "+nombrerecibido
+        elif usuarioencontrado is None:
+            error = True
+            textoerror += "No se ha encontrado un usuario con ese nombre!"
+            return render_template("index.html", error=error, textoerror=textoerror)
             #falta splash de error
         else:
 
             for passwor_data in contraseñaencontrada:
                 if contrarecibida == passwor_data:  #si son iguales...
-
+                    error = False
                     session["user"] = nombrerecibido#se guarda la variable session.
                     return redirect(url_for('home')) #redirecciona a home si funciona..
                 else:
-                    return f"La contraseña es incorrecta"
+                    error = True
+                    textoerror += "La contraseña es incorrecta!"
+                    return render_template("index.html", error=error, textoerror=textoerror)
     				#return render_template('login.html')
                     #falta splash de error
 
@@ -167,3 +175,66 @@ def validarregistro():
 
 
     return render_template("registro.html", error=error , textoerror=textoerror, usuarioregistrar=usuarioregistrar, nombreregistrar=nombreregistrar, apellidoregistrar=apellidoregistrar, correoregistrar=correoregistrar)
+
+
+
+
+@app.route("/buscar", methods=["POST", "GET"])
+def buscar():
+    busquedarecibida = request.form.get("busqueda")
+    if "user" in session:
+        usuario = session["user"]
+        nombreusuario = basededatos.execute("SELECT nombreusuario FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
+        apellidousuario = basededatos.execute("SELECT apellidousuario FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
+
+        for row in nombreusuario:
+            nusuario = nombreusuario[0]
+
+        for row in apellidousuario:
+            ausuario = apellidousuario[0]
+
+        usuariomostrar = nusuario + " " + ausuario
+
+        textoerror = ""
+        busqueda = True
+        #consulta para buscar cualquier resultado entre los campos que coincida con la busqueda
+        busquedaencontrada = basededatos.execute("SELECT isbn, titulo, autor, año FROM libros WHERE (LOWER(isbn) LIKE LOWER(:bus)) OR (LOWER(titulo) LIKE LOWER(:bus)) OR (LOWER(autor) LIKE LOWER(:bus)) LIMIT 10", { "bus": '%' + busquedarecibida + '%'} )
+        filas = busquedaencontrada.fetchall()
+
+        #if busquedaencontrada is None:
+            #busqueda = False
+            #textoerror += "No se han encontrado resultados con es búsqueda."
+
+        #else:
+            #busqueda = True
+            #textoerror += "Búsqueda exitosa!"
+
+        return render_template("sesionbusqueda.html", busquedarecibida = busquedarecibida, busqueda = busqueda, filas=filas, textoerror=textoerror, usuariomostrar=usuariomostrar)
+
+
+@app.route("/mostrarlibro", methods=["POST", "GET"])
+def mostrarlibro():
+    isbnrecibido = request.form.get("isbn")
+
+    if "user" in session:
+        usuario = session["user"]
+        nombreusuario = basededatos.execute("SELECT nombreusuario FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
+        apellidousuario = basededatos.execute("SELECT apellidousuario FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
+
+        datoslibro = basededatos.execute("SELECT isbn, titulo, autor, año  FROM libros WHERE isbn=:isbnrecibido",{"isbnrecibido":isbnrecibido}).fetchall()
+
+        for row in nombreusuario:
+            nusuario = nombreusuario[0]
+
+        for row in apellidousuario:
+            ausuario = apellidousuario[0]
+
+        usuariomostrar = nusuario + " " + ausuario
+
+        for dato in datoslibro:
+            isbn = dato[0]
+            titulo  = dato[1]
+            autor = dato[2]
+            año = dato[3]
+
+        return render_template("infolibro.html",usuariomostrar=usuariomostrar, isbn=isbn, titulo=titulo, autor=autor, año=año)

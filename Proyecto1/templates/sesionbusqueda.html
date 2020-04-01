@@ -83,17 +83,59 @@
 
       </div>
 
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Buscar" name="search">
-        <div class="input-group-btn" >
-          <button class="btn "  type="submit" style="background-color: #C7513C!important;"><i class="fa fa-search"></i></button>
+      <form action="{{ url_for('buscar') }}" method="post">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Buscar" name="busqueda">
+          <div class="input-group-btn" >
+            <button class="btn " href="resultadobusqueda" type="submit" style="background-color: #C7513C!important;"><i class="fa fa-search"></i></button>
+          </div>
         </div>
-      </div>
+      </form>
+
       <p style=" font-family: 'Lobster', cursive;">Be a Bookaholic</p>
+
+
     </center>
 
   </div>
 
+  {% if busqueda %}
+  <div class="container mt-4" id="resultadobusqueda" style="background: #D79858!important;">
+    <center>
+      <h1 style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Resultados de búsqueda!</h1>
+      <p style="font-family: 'Oswald', sans-serif; font-size:125%!important;">Busqueda realizada: {{busquedarecibida}}</p>
+
+      <table class="table table-hover" style="font-family: 'Oswald', sans-serif; font-size:125%!important;">
+        <thead>
+          <tr class="table-active">
+            <th scope="col">Isbn</th>
+            <th scope="col">Libro</th>
+            <th scope="col">Autor</th>
+            <th scope="col">Año</th>
+          </tr>
+        </thead>
+
+
+        <tbody>
+          {% for fila in filas %}
+              <tr class="table-warning">
+                <td>
+                  <form action="{{ url_for('mostrarlibro') }}" method="post">
+                      <button type="submit" name="isbn" value="{{fila[0]}}" >{{fila[0]}}</button>
+                  </form>
+                </td>
+                <td>{{fila[1]}}</td>
+                <td>{{fila[2]}}</td>
+                <td>{{fila[3]}}</td>
+              </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+      <br>
+    </center>
+  </div>
+  {% endif %}
 
 
 
