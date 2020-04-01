@@ -88,7 +88,7 @@ def home():
         usuariomostrar = nusuario + " " + ausuario
         #nusuario = nombreusuario
         #ausuario = apellidousuario
-
+        basededatos.commit()
         return render_template("sesionbusqueda.html",usuariomostrar=usuariomostrar)
     else:
         return redirect(url_for("validar"))
@@ -208,7 +208,7 @@ def buscar():
         #else:
             #busqueda = True
             #textoerror += "Búsqueda exitosa!"
-
+        basededatos.commit()
         return render_template("sesionbusqueda.html", busquedarecibida = busquedarecibida, busqueda = busqueda, filas=filas, textoerror=textoerror, usuariomostrar=usuariomostrar)
 
 
@@ -237,4 +237,5 @@ def mostrarlibro():
             autor = dato[2]
             año = dato[3]
 
+        basededatos.commit()
         return render_template("infolibro.html",usuariomostrar=usuariomostrar, isbn=isbn, titulo=titulo, autor=autor, año=año)
