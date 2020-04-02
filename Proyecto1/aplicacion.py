@@ -7,11 +7,13 @@ import os
 
 
 app = Flask(__name__)
+app.jinja_env.filters['zip'] = zip
+
 app.secret_key = "1234"
 
 
 
-engine = create_engine("postgres://saciatig:qdSgbJnUJhokzzt7IQhMZSEBD41EfRGS@otto.db.elephantsql.com:5432/saciatig") #se conecta a la base de datos
+engine = create_engine("postgres://pmhinabc:6n39qayiNGhTpt7bfayK06Ljk8AeB8FB@otto.db.elephantsql.com:5432/pmhinabc") #se conecta a la base de datos
 basededatos = scoped_session(sessionmaker(bind=engine))
 
 #index normal
@@ -76,6 +78,10 @@ def validar():
 def home():
     if "user" in session:
         usuario = session["user"]
+        if "busqueda" in session:
+            session.pop("busqueda", None)
+        if "isbn" in session:
+            session.pop("isbn", None)
         nombreusuario = basededatos.execute("SELECT nombreusuario FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
         apellidousuario = basededatos.execute("SELECT apellidousuario FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
 
@@ -97,8 +103,11 @@ def home():
 @app.route("/logout")
 def logout():
     session.pop("user", None)
+    session.pop("busqueda", None)
+    session.pop("isbn", None)
     #return render_template("index.html")
     return redirect(url_for("index"))
+
 
 
 #registro
@@ -181,7 +190,6 @@ def validarregistro():
 
 @app.route("/buscar", methods=["POST", "GET"])
 def buscar():
-    busquedarecibida = request.form.get("busqueda")
     if "user" in session:
         usuario = session["user"]
         nombreusuario = basededatos.execute("SELECT nombreusuario FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
@@ -195,33 +203,79 @@ def buscar():
 
         usuariomostrar = nusuario + " " + ausuario
 
-        textoerror = ""
-        busqueda = True
-        #consulta para buscar cualquier resultado entre los campos que coincida con la busqueda
-        busquedaencontrada = basededatos.execute("SELECT isbn, titulo, autor, año FROM libros WHERE (LOWER(isbn) LIKE LOWER(:bus)) OR (LOWER(titulo) LIKE LOWER(:bus)) OR (LOWER(autor) LIKE LOWER(:bus)) LIMIT 10", { "bus": '%' + busquedarecibida + '%'} )
-        filas = busquedaencontrada.fetchall()
 
-        #if busquedaencontrada is None:
-            #busqueda = False
-            #textoerror += "No se han encontrado resultados con es búsqueda."
 
-        #else:
-            #busqueda = True
-            #textoerror += "Búsqueda exitosa!"
-        basededatos.commit()
-        return render_template("sesionbusqueda.html", busquedarecibida = busquedarecibida, busqueda = busqueda, filas=filas, textoerror=textoerror, usuariomostrar=usuariomostrar)
+        #si se recarga y ya se habia cargado un libro
+        if "busqueda" in session:
+            #ver si se mando algo...
+            if request.method == "POST":
+                busquedarecibida = request.form.get("busqueda")
+                session["busqueda"] = busquedarecibida
+                busquedasesion = session["busqueda"]
+                textoerror = ""
+                busqueda = True
+                #consulta para buscar cualquier resultado entre los campos que coincida con la busqueda
+                busquedaencontrada = basededatos.execute("SELECT isbn, titulo, autor, año FROM libros WHERE (LOWER(isbn) LIKE LOWER(:bus)) OR (LOWER(titulo) LIKE LOWER(:bus)) OR (LOWER(autor) LIKE LOWER(:bus)) LIMIT 10", { "bus": '%' + busquedasesion + '%'} )
+                filas = busquedaencontrada.fetchall()
+
+                #if busquedaencontrada is None:
+                    #busqueda = False
+                    #textoerror += "No se han encontrado resultados con es búsqueda."
+
+                #else:
+                    #busqueda = True
+                    #textoerror += "Búsqueda exitosa!"
+                basededatos.commit()
+                return render_template("sesionbusqueda.html", busquedarecibida = busquedarecibida, busqueda = busqueda, filas=filas, textoerror=textoerror, usuariomostrar=usuariomostrar)
+
+            #si se recarga la página...
+            else:
+                busquedasesion = session["busqueda"]
+                textoerror = ""
+                busqueda = True
+                #consulta para buscar cualquier resultado entre los campos que coincida con la busqueda
+                busquedaencontrada = basededatos.execute("SELECT isbn, titulo, autor, año FROM libros WHERE (LOWER(isbn) LIKE LOWER(:bus)) OR (LOWER(titulo) LIKE LOWER(:bus)) OR (LOWER(autor) LIKE LOWER(:bus)) LIMIT 10", { "bus": '%' + busquedasesion + '%'} )
+                filas = busquedaencontrada.fetchall()
+
+                #if busquedaencontrada is None:
+                    #busqueda = False
+                    #textoerror += "No se han encontrado resultados con es búsqueda."
+
+                #else:
+                    #busqueda = True
+                    #textoerror += "Búsqueda exitosa!"
+                basededatos.commit()
+                return render_template("sesionbusqueda.html", busqueda = busqueda, filas=filas, textoerror=textoerror, usuariomostrar=usuariomostrar)
+
+        #si todabia no se busco un libro
+        else:
+            busquedarecibida = request.form.get("busqueda")
+            session["busqueda"] = busquedarecibida
+            textoerror = ""
+            busqueda = True
+            #consulta para buscar cualquier resultado entre los campos que coincida con la busqueda
+            busquedaencontrada = basededatos.execute("SELECT isbn, titulo, autor, año FROM libros WHERE (LOWER(isbn) LIKE LOWER(:bus)) OR (LOWER(titulo) LIKE LOWER(:bus)) OR (LOWER(autor) LIKE LOWER(:bus)) LIMIT 10", { "bus": '%' + busquedarecibida + '%'} )
+            filas = busquedaencontrada.fetchall()
+
+            #if busquedaencontrada is None:
+                #busqueda = False
+                #textoerror += "No se han encontrado resultados con es búsqueda."
+
+            #else:
+                #busqueda = True
+                #textoerror += "Búsqueda exitosa!"
+            basededatos.commit()
+            return render_template("sesionbusqueda.html", busquedarecibida = busquedarecibida, busqueda = busqueda, filas=filas, textoerror=textoerror, usuariomostrar=usuariomostrar)
 
 
 @app.route("/mostrarlibro", methods=["POST", "GET"])
 def mostrarlibro():
-    isbnrecibido = request.form.get("isbn")
+
 
     if "user" in session:
         usuario = session["user"]
         nombreusuario = basededatos.execute("SELECT nombreusuario FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
         apellidousuario = basededatos.execute("SELECT apellidousuario FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
-
-        datoslibro = basededatos.execute("SELECT isbn, titulo, autor, año  FROM libros WHERE isbn=:isbnrecibido",{"isbnrecibido":isbnrecibido}).fetchall()
 
         for row in nombreusuario:
             nusuario = nombreusuario[0]
@@ -231,11 +285,405 @@ def mostrarlibro():
 
         usuariomostrar = nusuario + " " + ausuario
 
-        for dato in datoslibro:
-            isbn = dato[0]
-            titulo  = dato[1]
-            autor = dato[2]
-            año = dato[3]
+        #si ya se ha dado información de un libro
+        if "isbn" in session:
+            #si se quiere visualizar la información de un nuevo libro...
+            if request.method == "POST":
+                isbnrecibido = request.form.get("isbn")
+                session["isbn"] = isbnrecibido
+                isbnsesion = session["isbn"]
 
+                datoslibro = basededatos.execute("SELECT isbn, titulo, autor, año  FROM libros WHERE isbn=:isbnrecibido",{"isbnrecibido":isbnsesion}).fetchall()
+
+                for dato in datoslibro:
+                    isbn = dato[0]
+                    titulo  = dato[1]
+                    autor = dato[2]
+                    año = dato[3]
+
+
+
+                #RESEÑAS-----------------------------------------
+                isbnreseña = session["isbn"]
+                numeroregistrosconsulta = basededatos.execute("SELECT count(*) FROM reseñas WHERE libreo_isbn=:isbnreseña",{"isbnreseña":isbnreseña}).fetchall()
+
+                for dato in numeroregistrosconsulta:
+                    numeroregistrosfor = dato[0]
+
+                numeroregistros = str(numeroregistrosfor)
+                siescero = "0"
+                textoreseña =""
+
+                if numeroregistros == siescero:
+                    hayreseña = False
+                    return render_template("infolibro.html",usuariomostrar=usuariomostrar, isbn=isbn, titulo=titulo, autor=autor, año=año, hayreseña=hayreseña)
+
+                #si hay registros.. FUNCIONA!
+                else:
+                    hayreseña = True
+
+                    #se obtienen resultados de la columna calificaciones.
+                    calificaciones = basededatos.execute("SELECT sum(calificacion) FROM reseñas WHERE libreo_isbn=:isbnmostrado",{"isbnmostrado":isbnreseña})
+                    filascalificaciones = calificaciones.fetchall()
+
+
+                    for calif in filascalificaciones:
+                        totalcaliffor = calif[0]
+
+                    #resultado de la suma de todas las calificaciones de ese libro.
+                    suma = str(totalcaliffor)
+
+                    #promedio de calificaciones
+                    promedioennumero = int(suma)/float(int(numeroregistros))
+                    promedioredondeado = round(promedioennumero)
+                    #se manda al template
+                    promedio = str(promedioredondeado)
+
+                #PROMEDIO DE ESTRELLITAS!.--------------------------------------------------
+                    promedioestrellas = float((1/int(numeroregistros))*100) #50%
+
+                    calif1 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '1'",{"isbnmostrado":isbnreseña})
+                    calificacion1 = calif1.fetchall()
+
+                    prom1 = float(0)
+
+                    if calificacion1 is None:
+                        prom1 = float(0)
+                    else:
+                        for c1 in calificacion1:
+                            prom1 += float(promedioestrellas)
+                    prom1redondeado = round(prom1)
+
+                    calif2 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '2'",{"isbnmostrado":isbnreseña})
+                    calificacion2 = calif2.fetchall()
+
+                    prom2 = float(0)
+
+                    if calificacion2 is None:
+                        prom2 = float(0)
+                    else:
+                        for c2 in calificacion2:
+                            prom2 += float(promedioestrellas)
+                    prom2redondeado = round(prom2)
+
+                    calif3 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '3'",{"isbnmostrado":isbnreseña})
+                    calificacion3 = calif3.fetchall()
+
+                    prom3 = float(0)
+
+                    if calificacion3 is None:
+                        prom3 = float(0)
+                    else:
+                        for c3 in calificacion3:
+                            prom3 += float(promedioestrellas)
+                    prom3redondeado = round(prom3)
+
+                    calif4 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '4'",{"isbnmostrado":isbnreseña})
+                    calificacion4 = calif4.fetchall()
+
+                    prom4 = float(0)
+
+                    if calificacion4 is None:
+                        prom4 = float(0)
+                    else:
+                        for c4 in calificacion4:
+                            prom4 += float(promedioestrellas)
+                    prom4redondeado = round(prom4)
+
+                    calif5 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '5'",{"isbnmostrado":isbnreseña})
+                    calificacion5 = calif5.fetchall()
+
+                    prom5 = float(0)
+
+                    if calificacion5 is None:
+                        prom5 = float(0)
+                    else:
+                        for c5 in calificacion5:
+                            prom5 += float(promedioestrellas)
+                    prom5redondeado = round(prom5)
+
+                    #se obtienen todas las reseñas
+                    reseña = basededatos.execute("SELECT idReseña, usuario_id, libreo_isbn, textoReseña, calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado",{"isbnmostrado":isbnreseña})
+                    filasreseña = reseña.fetchall()
+
+                    nombres = basededatos.execute("SELECT nombreusuario, apellidousuario FROM usuarios A, reseñas B WHERE B.usuario_id = A.id")
+                    filasnombres = nombres.fetchall()
+
+
+                    basededatos.commit()
+                    return render_template("infolibro.html",usuariomostrar=usuariomostrar, isbn=isbn, titulo=titulo, autor=autor, año=año, hayreseña=hayreseña, promedio=promedio , filasreseña=filasreseña, numeroregistros=numeroregistros)
+
+
+            #se recarga la página
+            else:
+                isbnsesion = session["isbn"]
+
+                datoslibro = basededatos.execute("SELECT isbn, titulo, autor, año  FROM libros WHERE isbn=:isbnrecibido",{"isbnrecibido":isbnsesion}).fetchall()
+
+                for dato in datoslibro:
+                    isbn = dato[0]
+                    titulo  = dato[1]
+                    autor = dato[2]
+                    año = dato[3]
+
+
+
+                #RESEÑAS-----------------------------------------
+                isbnreseña = session["isbn"]
+                numeroregistrosconsulta = basededatos.execute("SELECT count(*) FROM reseñas WHERE libreo_isbn=:isbnreseña",{"isbnreseña":isbnreseña}).fetchall()
+
+                for dato in numeroregistrosconsulta:
+                    numeroregistrosfor = dato[0]
+
+                numeroregistros = str(numeroregistrosfor)
+                siescero = "0"
+                textoreseña =""
+
+                if numeroregistros == siescero:
+                    hayreseña = False
+                    return render_template("infolibro.html",usuariomostrar=usuariomostrar, isbn=isbn, titulo=titulo, autor=autor, año=año, hayreseña=hayreseña)
+
+                #si hay registros.. FUNCIONA!
+                else:
+                    hayreseña = True
+
+                    #se obtienen resultados de la columna calificaciones.
+                    calificaciones = basededatos.execute("SELECT sum(calificacion) FROM reseñas WHERE libreo_isbn=:isbnmostrado",{"isbnmostrado":isbnreseña})
+                    filascalificaciones = calificaciones.fetchall()
+
+
+                    for calif in filascalificaciones:
+                        totalcaliffor = calif[0]
+
+                    #resultado de la suma de todas las calificaciones de ese libro.
+                    suma = str(totalcaliffor)
+
+                    #promedio de calificaciones
+                    promedioennumero = int(suma)/float(int(numeroregistros))
+                    promedioredondeado = round(promedioennumero)
+                    #se manda al template
+                    promedio = str(promedioredondeado)
+
+                #PROMEDIO DE ESTRELLITAS!.--------------------------------------------------
+                    promedioestrellas = float((1/int(numeroregistros))*100) #50%
+
+                    calif1 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '1'",{"isbnmostrado":isbnreseña})
+                    calificacion1 = calif1.fetchall()
+
+                    prom1 = float(0)
+
+                    if calificacion1 is None:
+                        prom1 = float(0)
+                    else:
+                        for c1 in calificacion1:
+                            prom1 += float(promedioestrellas)
+                    prom1redondeado = round(prom1)
+
+                    calif2 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '2'",{"isbnmostrado":isbnreseña})
+                    calificacion2 = calif2.fetchall()
+
+                    prom2 = float(0)
+
+                    if calificacion2 is None:
+                        prom2 = float(0)
+                    else:
+                        for c2 in calificacion2:
+                            prom2 += float(promedioestrellas)
+                    prom2redondeado = round(prom2)
+
+                    calif3 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '3'",{"isbnmostrado":isbnreseña})
+                    calificacion3 = calif3.fetchall()
+
+                    prom3 = float(0)
+
+                    if calificacion3 is None:
+                        prom3 = float(0)
+                    else:
+                        for c3 in calificacion3:
+                            prom3 += float(promedioestrellas)
+                    prom3redondeado = round(prom3)
+
+                    calif4 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '4'",{"isbnmostrado":isbnreseña})
+                    calificacion4 = calif4.fetchall()
+
+                    prom4 = float(0)
+
+                    if calificacion4 is None:
+                        prom4 = float(0)
+                    else:
+                        for c4 in calificacion4:
+                            prom4 += float(promedioestrellas)
+                    prom4redondeado = round(prom4)
+
+                    calif5 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '5'",{"isbnmostrado":isbnreseña})
+                    calificacion5 = calif5.fetchall()
+
+                    prom5 = float(0)
+
+                    if calificacion5 is None:
+                        prom5 = float(0)
+                    else:
+                        for c5 in calificacion5:
+                            prom5 += float(promedioestrellas)
+                    prom5redondeado = round(prom5)
+
+                    #se obtienen todas las reseñas
+                    reseña = basededatos.execute("SELECT idReseña, usuario_id, libreo_isbn, textoReseña, calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado",{"isbnmostrado":isbnreseña})
+                    filasreseña = reseña.fetchall()
+
+                    nombres = basededatos.execute("SELECT nombreusuario, apellidousuario FROM usuarios A, reseñas B WHERE B.usuario_id = A.id")
+                    filasnombres = nombres.fetchall()
+
+                    basededatos.commit()
+                    return render_template("infolibro.html",usuariomostrar=usuariomostrar, isbn=isbn, titulo=titulo, autor=autor, año=año, hayreseña=hayreseña, promedio=promedio , filasreseña=filasreseña , numeroregistros=numeroregistros, prom1=prom1, prom2=prom2, prom3=prom3, prom4=prom4, prom5=prom5, prom1redondeado=prom1redondeado , prom2redondeado=prom2redondeado, prom3redondeado=prom3redondeado, prom4redondeado=prom4redondeado, prom5redondeado=prom5redondeado, filasnombres=filasnombres)
+
+
+
+
+        #se solicita información de un libro..
+        else:
+            isbnrecibido = request.form.get("isbn")
+            session["isbn"] = isbnrecibido
+
+            datoslibro = basededatos.execute("SELECT isbn, titulo, autor, año  FROM libros WHERE isbn=:isbnrecibido",{"isbnrecibido":isbnrecibido}).fetchall()
+
+            for dato in datoslibro:
+                isbn = dato[0]
+                titulo  = dato[1]
+                autor = dato[2]
+                año = dato[3]
+
+            session["isbn"] = isbn
+
+            #RESEÑAS-----------------------------------------
+            isbnreseña = session["isbn"]
+            numeroregistrosconsulta = basededatos.execute("SELECT count(*) FROM reseñas WHERE libreo_isbn=:isbnreseña",{"isbnreseña":isbnreseña}).fetchall()
+
+            for dato in numeroregistrosconsulta:
+                numeroregistrosfor = dato[0]
+
+            numeroregistros = str(numeroregistrosfor)
+            siescero = "0"
+            textoreseña =""
+
+            if numeroregistros == siescero:
+                hayreseña = False
+                return render_template("infolibro.html",usuariomostrar=usuariomostrar, isbn=isbn, titulo=titulo, autor=autor, año=año, hayreseña=hayreseña, numeroregistros=numeroregistros, prom1=prom1, prom2=prom2, prom3=prom3, prom4=prom4, prom5=prom5, prom1redondeado=prom1redondeado , prom2redondeado=prom2redondeado, prom3redondeado=prom3redondeado, prom4redondeado=prom4redondeado, prom5redondeado=prom5redondeado, filasnombres=filasnombres)
+
+            #si hay registros.. FUNCIONA!
+            else:
+                hayreseña = True
+
+                #se obtienen resultados de la columna calificaciones.
+                calificaciones = basededatos.execute("SELECT sum(calificacion) FROM reseñas WHERE libreo_isbn=:isbnmostrado",{"isbnmostrado":isbnreseña})
+                filascalificaciones = calificaciones.fetchall()
+
+
+                for calif in filascalificaciones:
+                    totalcaliffor = calif[0]
+
+                #resultado de la suma de todas las calificaciones de ese libro.
+                suma = str(totalcaliffor)
+
+                #promedio de calificaciones
+                promedioennumero = int(suma)/float(int(numeroregistros))
+                promedioredondeado = round(promedioennumero)
+                #se manda al template
+                promedio = str(promedioredondeado)
+
+            #PROMEDIO DE ESTRELLITAS!.--------------------------------------------------
+                promedioestrellas = float((1/int(numeroregistros))*100) #50%
+
+                calif1 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '1'",{"isbnmostrado":isbnreseña})
+                calificacion1 = calif1.fetchall()
+
+                prom1 = float(0)
+
+                if calificacion1 is None:
+                    prom1 = float(0)
+                else:
+                    for c1 in calificacion1:
+                        prom1 += float(promedioestrellas)
+                prom1redondeado = round(prom1)
+
+                calif2 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '2'",{"isbnmostrado":isbnreseña})
+                calificacion2 = calif2.fetchall()
+
+                prom2 = float(0)
+
+                if calificacion2 is None:
+                    prom2 = float(0)
+                else:
+                    for c2 in calificacion2:
+                        prom2 += float(promedioestrellas)
+                prom2redondeado = round(prom2)
+
+                calif3 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '3'",{"isbnmostrado":isbnreseña})
+                calificacion3 = calif3.fetchall()
+
+                prom3 = float(0)
+
+                if calificacion3 is None:
+                    prom3 = float(0)
+                else:
+                    for c3 in calificacion3:
+                        prom3 += float(promedioestrellas)
+                prom3redondeado = round(prom3)
+
+                calif4 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '4'",{"isbnmostrado":isbnreseña})
+                calificacion4 = calif4.fetchall()
+
+                prom4 = float(0)
+
+                if calificacion4 is None:
+                    prom4 = float(0)
+                else:
+                    for c4 in calificacion4:
+                        prom4 += float(promedioestrellas)
+                prom4redondeado = round(prom4)
+
+                calif5 = basededatos.execute("SELECT calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado AND calificacion = '5'",{"isbnmostrado":isbnreseña})
+                calificacion5 = calif5.fetchall()
+
+                prom5 = float(0)
+
+                if calificacion5 is None:
+                    prom5 = float(0)
+                else:
+                    for c5 in calificacion5:
+                        prom5 += float(promedioestrellas)
+                prom5redondeado = round(prom5)
+
+                #se obtienen todas las reseñas
+                reseña = basededatos.execute("SELECT idReseña, usuario_id, libreo_isbn, textoReseña, calificacion FROM reseñas WHERE libreo_isbn=:isbnmostrado",{"isbnmostrado":isbnreseña})
+                filasreseña = reseña.fetchall()
+
+                nombres = basededatos.execute("SELECT nombreusuario, apellidousuario FROM usuarios A, reseñas B WHERE B.usuario_id = A.id")
+                filasnombres = nombres.fetchall()
+
+
+                basededatos.commit()
+                return render_template("infolibro.html",usuariomostrar=usuariomostrar, isbn=isbn, titulo=titulo, autor=autor, año=año, hayreseña=hayreseña, promedio=promedio , filasreseña=filasreseña , numeroregistros=numeroregistros, prom1=prom1, prom2=prom2, prom3=prom3, prom4=prom4, prom5=prom5, prom1redondeado=prom1redondeado , prom2redondeado=prom2redondeado, prom3redondeado=prom3redondeado, prom4redondeado=prom4redondeado, prom5redondeado=prom5redondeado, filasnombres=filasnombres)
+
+
+@app.route("/review", methods=["POST", "GET"])
+def review():
+    isbnreview= request.form.get("isbnreview")
+    texto_reseña = request.form.get("texto_reseña")
+    calificacion = request.form.get("calificacion")
+
+    if "user" in session:
+        usuariosesion = session["user"]
+
+        datosusuario =  basededatos.execute("SELECT id, usuario, nombreusuario FROM usuarios WHERE usuario=:nusuario",{"nusuario":usuariosesion}).fetchall()
+
+
+        for dato in datosusuario:
+            idusuario = dato[0]
+
+        idusuario2 = str(idusuario)
+
+        basededatos.execute("INSERT INTO reseñas (usuario_id, libreo_isbn, textoReseña, calificacion) VALUES (:dato1, :dato2, :dato3, :dato4)",{"dato1": idusuario2, "dato2": isbnreview, "dato3": texto_reseña, "dato4": calificacion})
         basededatos.commit()
-        return render_template("infolibro.html",usuariomostrar=usuariomostrar, isbn=isbn, titulo=titulo, autor=autor, año=año)
+
+        return redirect(url_for("mostrarlibro"))

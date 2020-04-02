@@ -4,7 +4,7 @@ import os #sistema operativo
 from sqlalchemy import create_engine   #crear instancia para base de datos
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-engine = create_engine("postgres://saciatig:qdSgbJnUJhokzzt7IQhMZSEBD41EfRGS@otto.db.elephantsql.com:5432/saciatig") #se conecta a la base de datos
+engine = create_engine("postgres://pmhinabc:6n39qayiNGhTpt7bfayK06Ljk8AeB8FB@otto.db.elephantsql.com:5432/pmhinabc") #se conecta a la base de datos
 db = scoped_session(sessionmaker(bind=engine))
 
 def main():

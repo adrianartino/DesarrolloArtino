@@ -15,6 +15,8 @@
   <script src="https://kit.fontawesome.com/a81368914c.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
 
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
@@ -41,7 +43,7 @@
 
               <a  class="nav-item nav-link active"></a>
               <a  class="nav-item nav-link active"><i class="fa fa-address-book" style="font-size:18px"></i> {{usuariomostrar}}</a>
-              <a href="#" class="nav-item nav-link" ><i class="	fa fa-home" style="font-size:18px;"></i> Home</a>
+              <a href="{{ url_for('home') }}" class="nav-item nav-link" ><i class="	fa fa-home" style="font-size:18px;"></i> Home</a>
               <a href="{{url_for('logout')}}" class="nav-item nav-link"><i class="fa fa-comments" style="font-size:18px"></i> Mis opiniones</a>
           </div>
           <form class="form-inline ml-auto">
@@ -108,9 +110,10 @@
 
         </table>
 
-        <br>
-        <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Calificación del libro!</h1>
 
+
+        {% if hayreseña %}
+        <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Calificación del libro!</h1>
         <div class="container" style="background: green!important;">
           <div class="row justify-content-center">
 
@@ -118,79 +121,103 @@
                     <div class="well well-sm">
                         <div class="row">
 
-                            <div class="col-xs-12 col-md-6 text-center" style="background: red!important;">
+                            <div class="col-xs-12 col-md-6 text-center" style="background: white!important;">
                                 <h1 class="rating-num">
-                                    4.0</h1>
+                                    {{promedio}}.0</h1>
+
+                                {% if promedio == "1" %}
+                                <div class="rating">
+                                    <span class="fa fa-star"></span><span class="fa fa-star-o">
+                                    </span><span class="fa fa-star-o"></span><span class="fa fa-star-o">
+                                    </span><span class="fa fa-star-o"></span>
+                                </div>
+                                {% elif promedio == "2" %}
+                                <div class="rating">
+                                    <span class="fa fa-star"></span><span class="fa fa-star">
+                                    </span><span class="fa fa-star-o"></span><span class="fa fa-star-o">
+                                    </span><span class="fa fa-star-o"></span>
+                                </div>
+                                {% elif promedio == "3" %}
+                                <div class="rating">
+                                    <span class="fa fa-star"></span><span class="fa fa-star">
+                                    </span><span class="fa fa-star"></span><span class="fa fa-star-o">
+                                    </span><span class="fa fa-star-o"></span>
+                                </div>
+                                {% elif promedio == "4" %}
                                 <div class="rating">
                                     <span class="fa fa-star"></span><span class="fa fa-star">
                                     </span><span class="fa fa-star"></span><span class="fa fa-star">
                                     </span><span class="fa fa-star-o"></span>
                                 </div>
+                                {% elif promedio == "5" %}
+                                <div class="rating">
+                                    <span class="fa fa-star"></span><span class="fa fa-star">
+                                    </span><span class="fa fa-star"></span><span class="fa fa-star">
+                                    </span><span class="fa fa-star"></span>
+                                </div>
+                                {% endif %}
+
                                 <div>
-                                    <span class="glyphicon glyphicon-user"></span>1,050,008 total
+                                    <span class="fa fa-user"></span> {{numeroregistros}} usuarios han hecho reseñas!
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-md-6">
+
+                            <div class="col-xs-12 col-md-6" style="background: white!important;">
                                 <div class="row rating-desc">
+
                                     <div class="col-xs-3 col-md-3 text-right">
                                         <span class="fa fa-star"></span>5
                                     </div>
                                     <div class="col-xs-8 col-md-9">
-                                        <div class="progress progress-striped">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                                <span class="sr-only">80%</span>
-                                            </div>
-                                        </div>
+
+                                      <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: {{prom5redondeado}}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{prom5}}%</div>
+                                      </div>
                                     </div>
+
                                     <!-- end 5 -->
                                     <div class="col-xs-3 col-md-3 text-right">
                                         <span class="fa fa-star"></span>4
                                     </div>
                                     <div class="col-xs-8 col-md-9">
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                                <span class="sr-only">60%</span>
-                                            </div>
-                                        </div>
+                                      <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: {{prom4redondeado}}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{prom4}}%</div>
+                                      </div>
                                     </div>
+
+
                                     <!-- end 4 -->
                                     <div class="col-xs-3 col-md-3 text-right">
                                         <span class="fa fa-star"></span>3
                                     </div>
                                     <div class="col-xs-8 col-md-9">
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                                <span class="sr-only">40%</span>
-                                            </div>
-                                        </div>
+                                      <div class="progress">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: {{prom3redondeado}}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{prom3}}%</div>
+                                      </div>
                                     </div>
+
+
                                     <!-- end 3 -->
                                     <div class="col-xs-3 col-md-3 text-right">
                                         <span class="fa fa-star"></span>2
                                     </div>
                                     <div class="col-xs-8 col-md-9">
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="20"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                                <span class="sr-only">20%</span>
-                                            </div>
-                                        </div>
+                                      <div class="progress">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{prom2redondeado}}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{prom2}}%</div>
+                                      </div>
                                     </div>
+
+
                                     <!-- end 2 -->
                                     <div class="col-xs-3 col-md-3 text-right">
                                         <span class="fa fa-star"></span>1
                                     </div>
                                     <div class="col-xs-8 col-md-9">
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80"
-                                                aria-valuemin="0" aria-valuemax="100" style="width: 15%">
-                                                <span class="sr-only">15%</span>
-                                            </div>
-                                        </div>
+                                      <div class="progress">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{prom1redondeado}}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{prom1}}%</div>
+                                      </div>
                                     </div>
+
                                     <!-- end 1 -->
                                 </div>
                                 <!-- end row -->
@@ -201,10 +228,101 @@
                 </div>
             </div>
           </div>
+          <!-- fin de calificaciones -->
+
+          <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Comentarios de usuarios!</h1>
+          <br>
+          {% for fila, filanom in filasreseña|zip(filasnombres) %}
+          <div class="container">
+          	<div class="card">
+          	    <div class="card-body">
+          	        <div class="row">
+                  	    <div class="col-md-2">
+                  	        <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid"/>
+                  	    </div>
+                  	    <div class="col-md-10">
+                  	        <p>
+                  	            <a class="float-left" ><strong>{{filanom[0]}} {{filanom[1]}}  {{fila[4]}}</strong></a>
+                                {% set fila4 = fila[4] %}
+                                {% if 'fila4' == "4" %}
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <h1>alksdflkasjdfasdf</h1>
+                                {% else %}
+                                <h1>jajajajaj {{fila4}}</h1>
+                                {% endif %}
+
+                  	       </p>
+                  	       <div class="justify-text"></div>
+                            <p>Comentario:</p>
+                  	        <p>{{fila[3]}}</p>
+                  	        <p>
+                  	            <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a>
+                  	       </p>
+                  	    </div>
+          	        </div>
+          	    </div>
+          	</div>
+          </div>
+          <br>
+          {% endfor %}
+
+          <br>
+
+          {% elif hayreseña == False %}
+          <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Comentarios de usuarios!</h1>
+          <br>
+          <p style="font-family: 'Oswald', sans-serif; font-size:150%!important;">Aún no hay comentarios del libro "{{titulo}}"!!. Puedes realizar
+          una reseña u opinión de este y darle una calificación!</p>
+          <br>
+          {% endif %}
+
+          <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Realizar comentario!</h1>
+          <br>
+
+
+            <form action="{{ url_for('review') }}" method="post">
+              <center>
+
+
+              <div class="form-group row">
+                <label for="staticEmail" class="col-sm-2 col-form-label">Isbn Libro</label>
+                <div class="col-sm-10">
+                  <input type="text" readonly class="form-control-plaintext" id="staticEmail" name="isbnreview" value="{{isbn}}">
+                </div>
+              </div>
+
+              <div class="form-group row purple-border">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Comentario:</label>
+                <div class="col-sm-10">
+                  <textarea class="form-control" id="exampleFormControlTextarea1" name="texto_reseña" rows="3" ></textarea>
+                </div>
+              </div>
+
+              </center>
+
+
+            <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Da una calificación!</h1>
+
+            <div class="d-flex justify-content-center my-4">
+              <span class="font-weight-bold blue-text mr-2 mt-1"><span class="fa fa-star"></span>0 estrellas</span>
+              <div class="range-field my-4 w-50 justify-content-center">
+                <input type="range" class="custom-range" min="0" max="5"  id="customRange3" name="calificacion">
+              </div>
+              <span class="font-weight-bold blue-text ml-2 mt-1">5 estrellas<span class="fa fa-star"></span></span>
+            </div>
+            <input type="submit" class="btn" value="Realizar comentario">
+            </form>
+
+
+
+          <br>
 
 
       </div>
-      <br>
+
 
 
 
