@@ -47,7 +47,6 @@ def validar():
             error = True
             textoerror += "No se ha encontrado un usuario con ese nombre!"
             return render_template("index.html", error=error, textoerror=textoerror)
-            #falta splash de error
         else:
 
             for passwor_data in contraseñaencontrada:
@@ -59,11 +58,8 @@ def validar():
                     error = True
                     textoerror += "La contraseña es incorrecta!"
                     return render_template("index.html", error=error, textoerror=textoerror)
-    				#return render_template('login.html')
-                    #falta splash de error
 
         basededatos.commit()
-        #return f"Usuarios : {numerodeusuarios} ! Contraseña : {contrarecibida} !"
 
     #si no se mando nada...
     else:
@@ -92,8 +88,6 @@ def home():
             ausuario = apellidousuario[0]
 
         usuariomostrar = nusuario + " " + ausuario
-        #nusuario = nombreusuario
-        #ausuario = apellidousuario
         basededatos.commit()
         return render_template("sesionbusqueda.html",usuariomostrar=usuariomostrar)
     else:
@@ -210,23 +204,23 @@ def buscar():
             #ver si se mando algo...
             if request.method == "POST":
                 busquedarecibida = request.form.get("busqueda")
-                session["busqueda"] = busquedarecibida
-                busquedasesion = session["busqueda"]
-                textoerror = ""
-                busqueda = True
-                #consulta para buscar cualquier resultado entre los campos que coincida con la busqueda
-                busquedaencontrada = basededatos.execute("SELECT isbn, titulo, autor, año FROM libros WHERE (LOWER(isbn) LIKE LOWER(:bus)) OR (LOWER(titulo) LIKE LOWER(:bus)) OR (LOWER(autor) LIKE LOWER(:bus)) LIMIT 10", { "bus": '%' + busquedasesion + '%'} )
-                filas = busquedaencontrada.fetchall()
 
-                #if busquedaencontrada is None:
-                    #busqueda = False
-                    #textoerror += "No se han encontrado resultados con es búsqueda."
+                if busquedarecibida == "":
+                    textoerror = "No has buscado nada!"
+                    errorbusqueda = True
+                    return render_template("sesionbusqueda.html", busquedarecibida = busquedarecibida, usuariomostrar=usuariomostrar, textoerror=textoerror, errorbusqueda=errorbusqueda)
 
-                #else:
-                    #busqueda = True
-                    #textoerror += "Búsqueda exitosa!"
-                basededatos.commit()
-                return render_template("sesionbusqueda.html", busquedarecibida = busquedarecibida, busqueda = busqueda, filas=filas, textoerror=textoerror, usuariomostrar=usuariomostrar)
+                else:
+                    errorbusqueda = False
+                    textoerror = "Busqueda realizada!"
+                    session["busqueda"] = busquedarecibida
+                    busquedasesion = session["busqueda"]
+                    busqueda = True
+                    #consulta para buscar cualquier resultado entre los campos que coincida con la busqueda
+                    busquedaencontrada = basededatos.execute("SELECT isbn, titulo, autor, año FROM libros WHERE (LOWER(isbn) LIKE LOWER(:bus)) OR (LOWER(titulo) LIKE LOWER(:bus)) OR (LOWER(autor) LIKE LOWER(:bus)) LIMIT 10", { "bus": '%' + busquedasesion + '%'} )
+                    filas = busquedaencontrada.fetchall()
+                    basededatos.commit()
+                    return render_template("sesionbusqueda.html", busquedarecibida = busquedarecibida, busqueda = busqueda, filas=filas, textoerror=textoerror, usuariomostrar=usuariomostrar, errorbusqueda=errorbusqueda)
 
             #si se recarga la página...
             else:
@@ -236,36 +230,28 @@ def buscar():
                 #consulta para buscar cualquier resultado entre los campos que coincida con la busqueda
                 busquedaencontrada = basededatos.execute("SELECT isbn, titulo, autor, año FROM libros WHERE (LOWER(isbn) LIKE LOWER(:bus)) OR (LOWER(titulo) LIKE LOWER(:bus)) OR (LOWER(autor) LIKE LOWER(:bus)) LIMIT 10", { "bus": '%' + busquedasesion + '%'} )
                 filas = busquedaencontrada.fetchall()
-
-                #if busquedaencontrada is None:
-                    #busqueda = False
-                    #textoerror += "No se han encontrado resultados con es búsqueda."
-
-                #else:
-                    #busqueda = True
-                    #textoerror += "Búsqueda exitosa!"
                 basededatos.commit()
                 return render_template("sesionbusqueda.html", busqueda = busqueda, filas=filas, textoerror=textoerror, usuariomostrar=usuariomostrar)
 
         #si todabia no se busco un libro
         else:
             busquedarecibida = request.form.get("busqueda")
-            session["busqueda"] = busquedarecibida
-            textoerror = ""
-            busqueda = True
-            #consulta para buscar cualquier resultado entre los campos que coincida con la busqueda
-            busquedaencontrada = basededatos.execute("SELECT isbn, titulo, autor, año FROM libros WHERE (LOWER(isbn) LIKE LOWER(:bus)) OR (LOWER(titulo) LIKE LOWER(:bus)) OR (LOWER(autor) LIKE LOWER(:bus)) LIMIT 10", { "bus": '%' + busquedarecibida + '%'} )
-            filas = busquedaencontrada.fetchall()
 
-            #if busquedaencontrada is None:
-                #busqueda = False
-                #textoerror += "No se han encontrado resultados con es búsqueda."
+            if busquedarecibida == "":
+                textoerror = "No has buscado nada!"
+                errorbusqueda = True
+                return render_template("sesionbusqueda.html", busquedarecibida = busquedarecibida, usuariomostrar=usuariomostrar, textoerror=textoerror, errorbusqueda=errorbusqueda)
+            else:
+                errorbusqueda = False
+                textoerror = "Busqueda realizada!"
+                session["busqueda"] = busquedarecibida
+                busqueda = True
+                #consulta para buscar cualquier resultado entre los campos que coincida con la busqueda
+                busquedaencontrada = basededatos.execute("SELECT isbn, titulo, autor, año FROM libros WHERE (LOWER(isbn) LIKE LOWER(:bus)) OR (LOWER(titulo) LIKE LOWER(:bus)) OR (LOWER(autor) LIKE LOWER(:bus)) LIMIT 10", { "bus": '%' + busquedarecibida + '%'} )
+                filas = busquedaencontrada.fetchall()
 
-            #else:
-                #busqueda = True
-                #textoerror += "Búsqueda exitosa!"
-            basededatos.commit()
-            return render_template("sesionbusqueda.html", busquedarecibida = busquedarecibida, busqueda = busqueda, filas=filas, textoerror=textoerror, usuariomostrar=usuariomostrar)
+                basededatos.commit()
+                return render_template("sesionbusqueda.html", busquedarecibida = busquedarecibida, busqueda = busqueda, filas=filas, usuariomostrar=usuariomostrar, textoerror=textoerror, errorbusqueda=errorbusqueda)
 
 
 @app.route("/mostrarlibro", methods=["POST", "GET"])
@@ -568,7 +554,7 @@ def mostrarlibro():
 
             if numeroregistros == siescero:
                 hayreseña = False
-                return render_template("infolibro.html",usuariomostrar=usuariomostrar, isbn=isbn, titulo=titulo, autor=autor, año=año, hayreseña=hayreseña, numeroregistros=numeroregistros, prom1=prom1, prom2=prom2, prom3=prom3, prom4=prom4, prom5=prom5, prom1redondeado=prom1redondeado , prom2redondeado=prom2redondeado, prom3redondeado=prom3redondeado, prom4redondeado=prom4redondeado, prom5redondeado=prom5redondeado, filasnombres=filasnombres)
+                return render_template("infolibro.html",usuariomostrar=usuariomostrar, isbn=isbn, titulo=titulo, autor=autor, año=año, hayreseña=hayreseña, numeroregistros=numeroregistros)
 
             #si hay registros.. FUNCIONA!
             else:
@@ -687,3 +673,42 @@ def review():
         basededatos.commit()
 
         return redirect(url_for("mostrarlibro"))
+
+
+@app.route("/opiniones", methods=["POST", "GET"])
+def opiniones():
+    if "user" in session:
+
+        usuario = session["user"]
+
+        nombreusuario = basededatos.execute("SELECT nombreusuario FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
+        apellidousuario = basededatos.execute("SELECT apellidousuario FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
+        idu = basededatos.execute("SELECT id FROM usuarios WHERE usuario=:username",{"username":usuario}).fetchone()
+
+        for row in nombreusuario:
+            nusuario = nombreusuario[0]
+
+        for row in apellidousuario:
+            ausuario = apellidousuario[0]
+
+        for row in idu:
+            idus = idu[0]
+
+        idusuario = str(idus)
+        usuariomostrar = nusuario + " " + ausuario
+
+        opinionespersonales = basededatos.execute("SELECT usuario_id, libreo_isbn, textoreseña, calificacion FROM reseñas WHERE usuario_id=:id",{"id":idus})
+        filasopinionespersonales = opinionespersonales.fetchall()
+
+        nombreslibros = basededatos.execute("SELECT titulo, autor, año FROM libros A, reseñas B WHERE B.libreo_isbn = A.isbn")
+        filasnombreslibros = nombreslibros.fetchall()
+
+        if opinionespersonales is None:
+            erroropinion = True
+            basededatos.commit()
+            return render_template("opiniones.html",usuariomostrar=usuariomostrar, erroropinion=erroropinion)
+
+        else:
+            opinion = True
+            basededatos.commit()
+            return render_template("opiniones.html",usuariomostrar=usuariomostrar, filasopinionespersonales= filasopinionespersonales, opinion=opinion, filasnombreslibros=filasnombreslibros)

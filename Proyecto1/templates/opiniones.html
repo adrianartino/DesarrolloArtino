@@ -9,7 +9,6 @@
 
   <link rel= "stylesheet" type= "text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
   <link rel= "stylesheet" type= "text/css" href="{{ url_for('static', filename='css/proyecto1busqueda.css') }}">
-  <link rel= "stylesheet" type= "text/css" href="{{ url_for('static', filename='css/animate.css') }}">
 
 
 
@@ -60,90 +59,94 @@
       </div>
   </nav>
 
-  <div class="container mt-5 animate bounceIn" id="jaja" style="background: #eb9788!important;">
+  <div class="container mt-5" id="jaja" style="background: #eb9788!important;">
     <center>
-      <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important; color: #F7F2F1!important;">Busca un libro!</h1>
+      <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important; color: #F7F2F1!important;">Mis opiniones!</h1>
 
       <img src="{{ url_for('static', filename='img/libros.png') }}" style="width: 10%; ">
+
       <div class="container mt-1">
+        <h1>LISTADO DE OPINIONES</h1>
+        {% if erroropinion %}
+        <p>No se han encontrado opiniones!</p>
 
-        <p style="font-family: 'Oswald', sans-serif; font-size:150%!important;">Bookaholics es una página web que te permite buscar entre más del
-        5000 libros! Puedes buscar por:</p>
-        <br>
-        <p style="font-family: 'Oswald', sans-serif; font-size:125%!important;"><strong>ISBN:</strong> Es el código que identifica a un libro,
-        por ejemplo "0380795272".</p>
+        {% elif opinion %}
+          {% for fila, filanom in filasopinionespersonales|zip(filasnombreslibros) %}
+          <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img img-rounded img-fluid"/>
+                        </div>
+                        <div class="col-md-10">
+                            <p>
+                                <a class="float-left" ><strong>Usuario: {{usuariomostrar}}</strong></a>
+                                {% if fila[3] == 1 %}
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <a class="float-right">Calificación: </a>
 
-        <p style="font-family: 'Oswald', sans-serif; font-size:125%!important;"><strong>Título del libro:</strong> Es el nombre del libro, por ejemplo "The Dark Is Rising".</p>
+                                {% elif fila[3] == 2 %}
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <a class="float-right">Calificación: </a>
 
-        <p style="font-family: 'Oswald', sans-serif; font-size:125%!important;"><strong>Autor del libro:</strong> Es el nombre de la persona que escribió el libro,
-          por ejemplo "Terry Brooks".</p>
+                                {% elif fila[3] == 3 %}
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <a class="float-right">Calificación: </a>
 
-        <p style="font-family: 'Oswald', sans-serif; font-size:125%!important;"><strong>Año de publicación:</strong> Es el año en que el libro fue publicado,
-          por ejemplo "1980".</p>
+                                {% elif fila[3] == 4 %}
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <a class="float-right">Calificación: </a>
 
-      </div>
+                                {% elif fila[3] == 5 %}
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <a class="float-right">Calificación: </a>
+                                {% endif %}
 
-      <form action="{{ url_for('buscar') }}" method="post">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Buscar" name="busqueda" data-toggle="tooltip" data-placement="left"
-          title="Busca un libro!">
-          <div class="input-group-btn" >
-            <button class="btn " href="resultadobusqueda" type="submit" style="background-color: #C7513C!important;"><i class="fa fa-search"></i></button>
+                           </p>
+                            <p>
+                                <a  ><strong>ISBN Libro: {{fila[1]}} Titulo del libro: {{filanom[0]}}</strong></a>
+                                <a ><strong>Titulo del libro: {{filanom[1]}}</strong></a>
+                                <a ><strong>Año de publicacion: {{filanom[2]}}</strong></a>
+                            </p>
+                            <p class="flot-left">Comentario:</p>
+                            <p class="flot-left">{{fila[2]}}</p>
+                            <p>
+                                <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a>
+                           </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
           </div>
-        </div>
-      </form>
+          <br>
+          {% endfor %}
+        {% endif %}
+      </div>
 
       <p style=" font-family: 'Lobster', cursive;">Be a Bookaholic</p>
 
-
     </center>
 
   </div>
 
-  {% if busqueda %}
-  <div class="container mt-4" id="resultadobusqueda" style="background: #D79858!important;">
-    <center>
-      <h1 style=" font-family: 'Lobster', cursive;  font-size:400%!important; color: #F7F2F1!important">Resultados de búsqueda!</h1>
-      <p style="font-family: 'Oswald', sans-serif; font-size:125%!important;">Busqueda realizada: {{busquedarecibida}}</p>
 
-      <table class="table table-hover" style="font-family: 'Oswald', sans-serif; font-size:125%!important;">
-        <thead>
-          <tr class="table-active">
-            <th scope="col">Isbn</th>
-            <th scope="col">Libro</th>
-            <th scope="col">Autor</th>
-            <th scope="col">Año</th>
-          </tr>
-        </thead>
-
-
-        <tbody>
-          {% for fila in filas %}
-              <tr class="table-warning">
-                <td>
-                  <form action="{{ url_for('mostrarlibro') }}" method="post">
-                      <button type="submit" name="isbn" value="{{fila[0]}}" >{{fila[0]}}</button>
-                  </form>
-                </td>
-                <td>{{fila[1]}}</td>
-                <td>{{fila[2]}}</td>
-                <td>{{fila[3]}}</td>
-              </tr>
-
-          {% endfor %}
-        </tbody>
-      </table>
-      <br>
-    </center>
-  </div>
-  {% endif %}
 
 
 
   <script src="{{url_for('static', filename='js/jquery-3.3.1.slim.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
-  <script src="{{url_for('static', filename='js/wow.min.js')}}"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 

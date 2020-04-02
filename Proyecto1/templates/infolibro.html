@@ -44,7 +44,7 @@
               <a  class="nav-item nav-link active"></a>
               <a  class="nav-item nav-link active"><i class="fa fa-address-book" style="font-size:18px"></i> {{usuariomostrar}}</a>
               <a href="{{ url_for('home') }}" class="nav-item nav-link" ><i class="	fa fa-home" style="font-size:18px;"></i> Home</a>
-              <a href="{{url_for('logout')}}" class="nav-item nav-link"><i class="fa fa-comments" style="font-size:18px"></i> Mis opiniones</a>
+              <a href="{{url_for('opiniones')}}" class="nav-item nav-link"><i class="fa fa-comments" style="font-size:18px"></i> Mis opiniones</a>
           </div>
           <form class="form-inline ml-auto">
 
@@ -54,7 +54,6 @@
               </button>
               <div class="dropdown-menu dropdown-menu-lg-right" >
                 <a class="dropdown-item" href="{{url_for('logout')}}"><i class="fa fa-sign-out" style="font-size:22px"></i> Cerrar sesion</a>
-                <a class="dropdown-item" href="#"><i class="fa fa-key" style="font-size:22px"></i> Cambiar contraseña</a>
               </div>
             </div>
 
@@ -67,7 +66,7 @@
 
   <div class="container mt-5" id="jaja" style="background: #eb9788!important;">
     <center>
-      <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Información del libro!</h1>
+      <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important; color: #F7F2F1!important">Información del libro!</h1>
 
       <img src="{{ url_for('static', filename='img/libros.png') }}" style="width: 10%; ">
       <div class="container mt-1">
@@ -113,15 +112,15 @@
 
 
         {% if hayreseña %}
-        <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Calificación del libro!</h1>
-        <div class="container" style="background: green!important;">
+        <h1 class="mt-5 wow bounceUp" style=" font-family: 'Lobster', cursive;  font-size:400%!important; color: #F7F2F1!important">Calificación del libro!</h1>
+        <div class="container wow bounceUp" >
           <div class="row justify-content-center">
 
                 <div class="col-xs-12 col-md-6">
                     <div class="well well-sm">
                         <div class="row">
 
-                            <div class="col-xs-12 col-md-6 text-center" style="background: white!important;">
+                            <div class="col-xs-12 col-md-6 text-center" style="background: #CD614E!important;">
                                 <h1 class="rating-num">
                                     {{promedio}}.0</h1>
 
@@ -162,7 +161,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-xs-12 col-md-6" style="background: white!important;">
+                            <div class="col-xs-12 col-md-6" style="background: #CD614E!important;">
                                 <div class="row rating-desc">
 
                                     <div class="col-xs-3 col-md-3 text-right">
@@ -230,10 +229,10 @@
           </div>
           <!-- fin de calificaciones -->
 
-          <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Comentarios de usuarios!</h1>
+          <h1 class="mt-5 wow bounceUp" style=" font-family: 'Lobster', cursive;  font-size:400%!important; color: #F7F2F1!important">Comentarios de usuarios!</h1>
           <br>
           {% for fila, filanom in filasreseña|zip(filasnombres) %}
-          <div class="container">
+          <div class="container wow bounceUp">
           	<div class="card">
           	    <div class="card-body">
           	        <div class="row">
@@ -242,22 +241,41 @@
                   	    </div>
                   	    <div class="col-md-10">
                   	        <p>
-                  	            <a class="float-left" ><strong>{{filanom[0]}} {{filanom[1]}}  {{fila[4]}}</strong></a>
-                                {% set fila4 = fila[4] %}
-                                {% if 'fila4' == "4" %}
+                  	            <a class="float-left" ><strong>Usuario: {{filanom[0]}} {{filanom[1]}}</strong></a>
+                                {% if fila[4] == 1 %}
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <a class="float-right">Calificación: </a>
+
+                                {% elif fila[4] == 2 %}
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <a class="float-right">Calificación: </a>
+
+                                {% elif fila[4] == 3 %}
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <a class="float-right">Calificación: </a>
+
+                                {% elif fila[4] == 4 %}
                                 <span class="float-right"><i class="text-warning fa fa-star"></i></span>
                                 <span class="float-right"><i class="text-warning fa fa-star"></i></span>
                                 <span class="float-right"><i class="text-warning fa fa-star"></i></span>
                                 <span class="float-right"><i class="text-warning fa fa-star"></i></span>
-                                <h1>alksdflkasjdfasdf</h1>
-                                {% else %}
-                                <h1>jajajajaj {{fila4}}</h1>
+                                <a class="float-right">Calificación: </a>
+
+                                {% elif fila[4] == 5 %}
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <a class="float-right">Calificación: </a>
                                 {% endif %}
 
                   	       </p>
-                  	       <div class="justify-text"></div>
-                            <p>Comentario:</p>
-                  	        <p>{{fila[3]}}</p>
+                            <p class="flot-left">Comentario:</p>
+                  	        <p class="flot-left">{{fila[3]}}</p>
                   	        <p>
                   	            <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a>
                   	       </p>
@@ -269,17 +287,16 @@
           <br>
           {% endfor %}
 
-          <br>
 
           {% elif hayreseña == False %}
-          <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Comentarios de usuarios!</h1>
+          <h1 class="mt-5 wow bounceUp" style=" font-family: 'Lobster', cursive;  font-size:400%!important; color: #F7F2F1!important">Comentarios de usuarios!</h1>
           <br>
-          <p style="font-family: 'Oswald', sans-serif; font-size:150%!important;">Aún no hay comentarios del libro "{{titulo}}"!!. Puedes realizar
+          <p class="wow bounceUp" tyle="font-family: 'Oswald', sans-serif; font-size:150%!important;">Aún no hay comentarios del libro "{{titulo}}"!!. Puedes realizar
           una reseña u opinión de este y darle una calificación!</p>
           <br>
           {% endif %}
 
-          <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Realizar comentario!</h1>
+          <h1 class="mt-5 wow bounceUp" style=" font-family: 'Lobster', cursive;  font-size:400%!important; color: #F7F2F1!important">Realizar comentario!</h1>
           <br>
 
 
@@ -287,14 +304,35 @@
               <center>
 
 
-              <div class="form-group row">
-                <label for="staticEmail" class="col-sm-2 col-form-label">Isbn Libro</label>
+              <div class="form-group row wow bounceUp">
+                <label for="staticEmail" class="col-sm-2 col-form-label">Isbn Libro:</label>
                 <div class="col-sm-10">
                   <input type="text" readonly class="form-control-plaintext" id="staticEmail" name="isbnreview" value="{{isbn}}">
                 </div>
               </div>
 
-              <div class="form-group row purple-border">
+              <div class="form-group row wow bounceUp">
+                <label for="staticEmail" class="col-sm-2 col-form-label">Titulo libro:</label>
+                <div class="col-sm-10">
+                  <input type="text" readonly class="form-control-plaintext" id="staticEmail"  value="{{titulo}}">
+                </div>
+              </div>
+
+              <div class="form-group row wow bounceUp">
+                <label for="staticEmail" class="col-sm-2 col-form-label">Autor Libro:</label>
+                <div class="col-sm-10">
+                  <input type="text" readonly class="form-control-plaintext" id="staticEmail"  value="{{autor}}">
+                </div>
+              </div>
+
+              <div class="form-group row wow bounceUp">
+                <label for="staticEmail" class="col-sm-2 col-form-label">Año de Libro:</label>
+                <div class="col-sm-10">
+                  <input type="text" readonly class="form-control-plaintext" id="staticEmail"  value="{{año}}">
+                </div>
+              </div>
+
+              <div class="form-group row purple-border wow bounceUp">
                 <label for="inputPassword" class="col-sm-2 col-form-label">Comentario:</label>
                 <div class="col-sm-10">
                   <textarea class="form-control" id="exampleFormControlTextarea1" name="texto_reseña" rows="3" ></textarea>
@@ -304,9 +342,9 @@
               </center>
 
 
-            <h1 class="mt-5" style=" font-family: 'Lobster', cursive;  font-size:400%!important;">Da una calificación!</h1>
+            <h1 class="mt-5 wow shake" style=" font-family: 'Lobster', cursive;  font-size:400%!important; color: #F7F2F1!important">Da una calificación!</h1>
 
-            <div class="d-flex justify-content-center my-4">
+            <div class="d-flex justify-content-center my-4 wow bounceUp">
               <span class="font-weight-bold blue-text mr-2 mt-1"><span class="fa fa-star"></span>0 estrellas</span>
               <div class="range-field my-4 w-50 justify-content-center">
                 <input type="range" class="custom-range" min="0" max="5"  id="customRange3" name="calificacion">
@@ -334,6 +372,7 @@
   <script src="{{url_for('static', filename='js/jquery-3.3.1.slim.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/wow.min.js')}}"></script>
 
 
 
@@ -351,6 +390,12 @@
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
+  </script>
+  <script>
+      //funcion
+        $(function(){
+          new WOW().init();
+        });
   </script>
 
 </body>
